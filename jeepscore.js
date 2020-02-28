@@ -192,3 +192,75 @@ class Game
 
 
 }
+
+
+function getPrettyElapsedTime(elapsedSeconds, ...units)
+{
+    // Supports units of "ywdhms" or "h","m","s"...
+    units = units.map(s => s.split("")).flat();
+
+    // If "0" is in units, also output the fields that have 0 value
+    //   i.e.  "2h 0m 1s"  instead of "2h 1s"
+    let keepZero = units.includes("0");
+    units = units.filter(el => el !== "0");
+    if (units.length === 0)
+        units = [ "y", "w", "d", "h", "m", "s" ];
+
+    let fields = {};
+
+    if (units.includes("y"))
+    {
+        let secPerYear = 365 * 24 * 60 * 60;
+        fields.y = Math.trunc(elapsedSeconds / secPerYear);
+        elapsedSeconds -= fields.y * secPerYear;
+    }
+
+    if (units.includes("w"))
+    {
+        let secPerWeek = 7 * 24 * 60 * 60;
+        fields.w = Math.trunc(elapsedSeconds / secPerWeek);
+        elapsedSeconds -= fields.w * secPerWeek;
+    }
+
+    if (units.includes("d"))
+    {
+        let secPerDay = 24 * 60 * 60;
+        fields.d = Math.trunc(elapsedSeconds / secPerDay);
+        elapsedSeconds -= fields.d * secPerDay;
+    }
+
+    if (units.includes("h"))
+    {
+        let secPerHour = 60 * 60;
+        fields.h = Math.trunc(elapsedSeconds / secPerHour);
+        elapsedSeconds -= fields.h * secPerHour;
+    }
+
+    if (units.includes("m"))
+    {
+        let secPerMin = 60;
+        fields.m = Math.trunc(elapsedSeconds / secPerMin);
+        elapsedSeconds -= fields.m * secPerMin;
+    }
+
+    if (units.includes("s"))
+    {
+        fields.s = elapsedSeconds;
+    }
+
+    let out = [];
+    for (let i of ["y", "w", "d", "h", "m", "s"])
+    {
+        if (i in fields)
+        {
+            // include fields of 0 if 0 was given in units
+            if (!keepZero && fields[i] === 0)
+                continue;
+
+            out.push(`${fields[i]}${i}`);
+        }
+    }
+
+    return out.join(" ");
+}
+
