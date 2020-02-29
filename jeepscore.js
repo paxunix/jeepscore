@@ -274,7 +274,7 @@ class GameUI
         playerEntryDiv.prepend(delPlayer);
         playerEntryDiv.append(bidButton);
 
-        jQuery("#playerContainer").append(playerEntryDiv);
+        jQuery("#playerEntryContainer").append(playerEntryDiv);
     }
 
 
