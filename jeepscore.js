@@ -26,8 +26,9 @@ class GameManager
     }
 
 
-    startGame()
+    startGame(players)
     {
+        this.game = new Game(players);
         this.game.startGame();
     }
 
@@ -78,9 +79,9 @@ class Player
 
 class Game
 {
-    constructor()
+    constructor(players)
     {
-        this.players = [];
+        this.players = players;
         this.startTime = null;
         this.endTime = null;
         this.count = 0;
@@ -250,17 +251,12 @@ function getPrettyElapsedTime(elapsedSeconds, ...units)
 
 class GameUI
 {
-    constructor()
+    static start()
     {
-        this.gameManager = new GameManager();
+        window.gameManager = new GameManager();
 
-        jQuery("#addPlayer").click(GameUI.addPlayer_click);
-    }
-
-
-    getGameManager()
-    {
-        return this.gameManager;
+        document.querySelector("#addPlayer").addEventListener("click", GameUI.addPlayer_click);
+        document.querySelector("#startGame").addEventListener("click", GameUI.start_click);
     }
 
 
@@ -303,5 +299,21 @@ class GameUI
         // Pad and hide the player's bid
         bidEl.type = "password";
         bidEl.value = bidEl.value.padEnd(10, " ");
+    }
+
+
+    static start_click(evt)
+    {
+        debugger;
+        let players = [];
+        for (let entry of document.querySelectorAll(".playerEntry"))
+        {
+            let name = entry.querySelector(".playerName").value.trim();
+            let bid = parseInt(entry.querySelector(".playerBid").value.trim(), 10);
+
+            players.push(new Player(name, bid));
+        }
+
+        window.gameManager.startGame(players);
     }
 }
