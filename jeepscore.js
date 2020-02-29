@@ -284,8 +284,48 @@ function getPrettyElapsedTime(elapsedSeconds, ...units)
 }
 
 
-// Main
+class GameUI
+{
+    constructor()
+    {
+        this.gameManager = new GameManager();
 
-let gameManager = new GameManager();
+        jQuery("#addPlayer").click(GameUI.addPlayer_click);
+    }
 
 
+    getGameManager()
+    {
+        return this.gameManager;
+    }
+
+
+    static addPlayer_click(evt)
+    {
+        let playerEntryDiv = jQuery(`
+<div class="playerEntry">
+  <input type="text" size="20" placeholder="Player name" minlength="1" required></input>
+  <input type="number" size="3" placeholder="Bid" minlength="1" inputmode="numeric" required></input>
+</div>
+`);
+        let bidButton = jQuery("<button>").text("Bid!").click(GameUI.bid_click);
+        playerEntryDiv.append(bidButton);
+
+        jQuery("#playerContainer").append(playerEntryDiv);
+    }
+
+
+    static bid_click(evt)
+    {
+        let entryEl = evt.target.closest(".playerEntry");
+
+        // Disable player changes now that name and bid have been entered
+        entryEl.children[0].disabled = true;
+        entryEl.children[1].disabled = true;
+        entryEl.children[2].disabled = true;
+
+        // Pad and hide the player's bid
+        entryEl.children[1].type = "password";
+        entryEl.children[1].value = entryEl.children[1].value.padEnd(10, " ");
+    }
+}
