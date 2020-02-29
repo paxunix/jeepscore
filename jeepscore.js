@@ -191,6 +191,25 @@ class Game
     }
 
 
+    toJson()
+    {
+        return JSON.stringify({
+            players: this.players,
+            startTime: this.startTime,
+            endTime: this.endTime,
+            count: this.count,
+        });
+    }
+
+    fromJson(str)
+    {
+        let o = JSON.parse(str);
+        this.players = o.players;
+        this.startTime = o.startTime;
+        this.endTime = o.endTime;
+        this.count = o.count;
+    }
+
 }
 
 
