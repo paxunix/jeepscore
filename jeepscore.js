@@ -304,14 +304,24 @@ class GameUI
     {
         let playerEntryDiv = jQuery(`
 <div class="playerEntry">
-  <input type="text" size="20" placeholder="Player name" minlength="1" required></input>
-  <input type="number" size="3" placeholder="Bid" minlength="1" inputmode="numeric" required></input>
+  <input class="playerName" type="text" size="20" placeholder="Player name" minlength="1" required></input>
+  <input class="playerBid" type="number" size="3" placeholder="Bid" minlength="1" inputmode="numeric" required></input>
 </div>
 `);
-        let bidButton = jQuery("<button>").text("Bid!").click(GameUI.bid_click);
+        let delPlayer = jQuery("<span>").addClass("playerDelete").html("&#x24cd;").click(GameUI.del_click);
+        let bidButton = jQuery("<button>").addClass("bidButton").text("Bid!").click(GameUI.bid_click);
+
+        playerEntryDiv.prepend(delPlayer);
         playerEntryDiv.append(bidButton);
 
         jQuery("#playerContainer").append(playerEntryDiv);
+    }
+
+
+    static del_click(evt)
+    {
+        let entryEl = evt.target.closest(".playerEntry");
+        entryEl.remove();
     }
 
 
@@ -320,12 +330,14 @@ class GameUI
         let entryEl = evt.target.closest(".playerEntry");
 
         // Disable player changes now that name and bid have been entered
-        entryEl.children[0].disabled = true;
-        entryEl.children[1].disabled = true;
-        entryEl.children[2].disabled = true;
+        entryEl.querySelector(".playerName").disabled = true;
+        entryEl.querySelector(".bidButton").disabled = true;
+
+        let bidEl = entryEl.querySelector(".playerBid");
+        bidEl.disabled = true;
 
         // Pad and hide the player's bid
-        entryEl.children[1].type = "password";
-        entryEl.children[1].value = entryEl.children[1].value.padEnd(10, " ");
+        bidEl.type = "password";
+        bidEl.value = bidEl.value.padEnd(10, " ");
     }
 }
