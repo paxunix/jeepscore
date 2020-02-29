@@ -1,0 +1,46 @@
+<head>
+  <title>Jeep Score</title>
+
+  <link rel="shortcut icon" type-"image/png" href="jeepscore.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    .leftspace {
+      margin-left: 2em;
+    }
+
+    button {
+      margin: 0.5em;
+    }
+
+    .inrange {
+      color: lightgreen;
+    }
+
+    .outrange {
+      color: salmon;
+    }
+
+    .nowrap {
+      white-space: nowrap;
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+  <script src="jeepscore.js"></script>
+</head>
+
+<body>
+  <div class="game">
+    <fieldset id="players">
+      <legend>Players</legend>
+      <div>
+        <div id="playerContainer"></div>
+        <button id="addPlayer">Add Player</button>
+      </div>
+    </fieldset>
+
+    <button id="startGame">Start</button>
+    <button id="resetGame">Reset</button>
+  </div>
+</body>

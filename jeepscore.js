@@ -283,3 +283,9 @@ function getPrettyElapsedTime(elapsedSeconds, ...units)
     return out.join(" ");
 }
 
+
+// Main
+
+let gameManager = new GameManager();
+
+
