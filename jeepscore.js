@@ -20,27 +20,6 @@ class GameManager
     }
 
 
-    prepGame()
-    {
-        if (this.isGameInProgress())
-            throw new Error("Game already in progress");
-
-        this.game = new Game();
-    }
-
-
-    addPlayer(name)
-    {
-        this.game.addPlayer(name);
-    }
-
-
-    removePlayer(name)
-    {
-        this.game.removePlayer(name);
-    }
-
-
     resetGame()
     {
         this.game = null;
@@ -107,21 +86,6 @@ class Game
         this.count = 0;
 
         return this;
-    }
-
-
-    addPlayer(name)
-    {
-        if (this.startTime === null)
-            throw new Error("Can't add a player to a running game");
-
-        this.players.push(new Player(name));
-    }
-
-
-    removePlayer(name)
-    {
-        this.players = this.players.filter(el => el.name() !== name);
     }
 
 
