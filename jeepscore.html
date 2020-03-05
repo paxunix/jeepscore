@@ -11,6 +11,12 @@
       font-weight: bold;
     }
 
+    .playerEntryError {
+      color: red;
+      cursor: help;
+      font-weight: bold;
+    }
+
     button {
       margin: 0.5em;
     }
@@ -25,6 +31,29 @@
 
     .nowrap {
       white-space: nowrap;
+    }
+
+    #countContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #deccount {
+      font-size: 300%;
+      font-weight: bold;
+      margin-right: 0.1em;
+    }
+
+    #inccount {
+      font-size: 300%;
+      font-weight: bold;
+      margin-left: 0.1em;
+    }
+
+    #counter {
+      font-size: 650%;
+      font-weight: bold;
     }
   </style>
 
@@ -43,7 +72,12 @@
     <fieldset id="gamePanel">
       <legend>Game On!</legend>
       <div>
-        <div id="playerContainer"> </div>
+        <div id="playerContainer"></div>
+        <div id="countContainer">
+          <div id="deccount">&#x25C0;</div>
+          <div id="counter"></div>
+          <div id="inccount">&#x25B6;</div>
+        </div>
       </div>
     </fieldset>
 
