@@ -14,9 +14,9 @@ class GameManager
     }
 
 
-    isGameInProgress()
+    getCurrentGame()
     {
-        return this.game !== null;
+        return this.game;
     }
 
 
@@ -144,6 +144,12 @@ class Game
     }
 
 
+    getNumPlayers()
+    {
+        return this.players.length;
+    }
+
+
     getStartTime()
     {
         return this.startTime;
@@ -255,21 +261,28 @@ class GameUI
     {
         window.gameManager = new GameManager();
 
-        document.querySelector("#addPlayer").addEventListener("click", GameUI.addPlayer_click);
+        document.querySelector("#addPlayer").addEventListener("click", GameUI.click_addPlayer);
         document.querySelector("#startGame").addEventListener("click", GameUI.start_click);
+
+        let currentGame = window.gameManager.getCurrentGame();
+        if (!currentGame)
+            GameUI.setUiState_noGame();
     }
 
 
-    static addPlayer_click(evt)
+    static click_addPlayer(evt)
     {
         let playerEntryDiv = jQuery(`
 <div class="playerEntry">
   <input class="playerName" type="text" size="20" placeholder="Player name" minlength="1" required></input>
   <input class="playerBid" type="number" size="3" placeholder="Bid" minlength="1" inputmode="numeric" required></input>
+  <span class="playerEntryError" title="Name and bid require values">&#x2757;<span>
 </div>
 `);
-        let delPlayer = jQuery("<span>").addClass("playerDelete").html("&#x24cd;").click(GameUI.del_click);
-        let bidButton = jQuery("<button>").addClass("bidButton").text("Bid!").click(GameUI.bid_click);
+        let delPlayer = jQuery("<span>").addClass("playerDelete").html("&#x24cd;").click(GameUI.click_deletePlayer);
+        let bidButton = jQuery("<button>").addClass("bidButton").text("Bid!").click(GameUI.click_bid);
+
+        playerEntryDiv[0].querySelector(".playerEntryError").style = "visibility: hidden;";
 
         playerEntryDiv.prepend(delPlayer);
         playerEntryDiv.append(bidButton);
@@ -278,42 +291,144 @@ class GameUI
     }
 
 
-    static del_click(evt)
+    static click_deletePlayer(evt)
     {
         let entryEl = evt.target.closest(".playerEntry");
         entryEl.remove();
+
+        GameUI.setUiState_allowStart();
     }
 
 
-    static bid_click(evt)
+    static click_bid(evt)
     {
         let entryEl = evt.target.closest(".playerEntry");
 
+        let bidEl = entryEl.querySelector(".playerBid");
+        let nameEl = entryEl.querySelector(".playerName");
+
+        if (nameEl.value.trim() === "" ||
+            bidEl.value.trim() === "")
+        {
+            entryEl.querySelector(".playerEntryError").style = "visibility: visible;";
+            return false;
+        }
+
+        entryEl.querySelector(".playerEntryError").style = "visibility: hidden;";
+
         // Disable player changes now that name and bid have been entered
-        entryEl.querySelector(".playerName").disabled = true;
+        nameEl.disabled = true;
         entryEl.querySelector(".bidButton").disabled = true;
 
-        let bidEl = entryEl.querySelector(".playerBid");
         bidEl.disabled = true;
 
         // Pad and hide the player's bid
         bidEl.type = "password";
         bidEl.value = bidEl.value.padEnd(10, " ");
+
+        GameUI.setUiState_allowStart();
     }
 
 
     static start_click(evt)
     {
         debugger;
+        let players = GameUI.getEnteredPlayers();
+
+        for (let entryEl of document.querySelectorAll(".playerEntry"))
+        {
+            entryEl.remove();
+        }
+
+        window.gameManager.startGame(players);
+
+        let currentGame = window.gameManager.getCurrentGame();
+        document.querySelector("#counter").textContent = currentGame.getCount();
+
+        GameUI.setUiState_startGame();
+    }
+
+
+    static getEnteredPlayers()
+    {
         let players = [];
         for (let entry of document.querySelectorAll(".playerEntry"))
         {
             let name = entry.querySelector(".playerName").value.trim();
             let bid = parseInt(entry.querySelector(".playerBid").value.trim(), 10);
 
-            players.push(new Player(name, bid));
+            if (name !== "" && bid > 0)
+                players.push(new Player(name, bid));
         }
 
-        window.gameManager.startGame(players);
+        return players;
+    }
+
+
+    static setUiState_allowAddPlayer()
+    {
+        let allowAddPlayer = false;
+
+        if (window.gameManager.getCurrentGame() === null)
+        {
+            allowAddPlayer = true;
+        }
+
+        document.querySelector("#addPlayer").disabled = !allowAddPlayer;
+    }
+
+
+    static setUiState_allowStart()
+    {
+        let allowStart = false;
+
+        let currentGame = window.gameManager.getCurrentGame();
+        if (currentGame)
+        {
+            allowStart = false;
+        }
+        else
+        {
+            if (GameUI.getEnteredPlayers().length > 0)
+                allowStart = true;
+            else
+                allowStart = false;
+        }
+
+        document.querySelector("#startGame").disabled = !allowStart;
+    }
+
+
+    static setUiState_allowReset()
+    {
+        let allowReset = false;
+
+        let currentGame = window.gameManager.getCurrentGame();
+        if (currentGame)
+        {
+            allowReset = true;
+        }
+
+        document.querySelector("#resetGame").disabled = !allowReset;
+    }
+
+
+    static setUiState_noGame()
+    {
+        GameUI.setUiState_allowAddPlayer();
+        GameUI.setUiState_allowStart();
+        GameUI.setUiState_allowReset();
+        document.querySelector("#playerEntryPanel").hidden = false;
+        document.querySelector("#gamePanel").hidden = true;
+    }
+
+
+    static setUiState_startGame()
+    {
+        GameUI.setUiState_allowAddPlayer();
+        GameUI.setUiState_allowStart();
+        GameUI.setUiState_allowReset();
+        document.querySelector("#playerEntryPanel").hidden = true;
+        document.querySelector("#gamePanel").hidden = false;
     }
 }
