@@ -37,26 +37,26 @@
       white-space: nowrap;
     }
 
-    #countContainer {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    #countContainer div {
+      font-size: 600%;
+      max-width: 88vw;
+      overflow-x: hidden;
+      text-align: center;
     }
 
     #deccount {
       font-size: 300%;
       font-weight: bold;
-      margin-right: 0.1em;
+      margin-top: -0.4ex;
     }
 
     #inccount {
       font-size: 300%;
       font-weight: bold;
-      margin-left: 0.1em;
     }
 
     #counter {
-      font-size: 650%;
+      font-size: 600%;
       font-weight: bold;
     }
   </style>
@@ -87,9 +87,9 @@
       <div>
         <div id="playerContainer"></div>
         <div id="countContainer">
-          <div id="deccount">&#x25C0;</div>
+          <div id="inccount">&#x25B2;</div>
           <div id="counter"></div>
-          <div id="inccount">&#x25B6;</div>
+          <div id="deccount">&#x25BC;</div>
         </div>
       </div>
     </fieldset>
