@@ -322,7 +322,7 @@ class GameUI
 
         // Pad and hide the player's bid
         bidEl.type = "password";
-        bidEl.value = bidEl.value.padEnd(10, " ");
+        bidEl.value = bidEl.value.padEnd(7, " ");
 
         GameUI.setUiState_allowStart();
     }
