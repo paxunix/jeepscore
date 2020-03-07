@@ -272,22 +272,20 @@ class GameUI
 
     static click_addPlayer(evt)
     {
-        let playerEntryDiv = jQuery(`
-<div class="playerEntry">
-  <input class="playerName" type="text" size="20" placeholder="Player name" minlength="1" required></input>
-  <input class="playerBid" type="number" size="3" placeholder="Bid" minlength="1" inputmode="numeric" required></input>
-  <span class="playerEntryError" title="Name and bid require values">&#x2757;<span>
-</div>
-`);
-        let delPlayer = jQuery("<span>").addClass("playerDelete").html("&#x24cd;").click(GameUI.click_deletePlayer);
-        let bidButton = jQuery("<button>").addClass("bidButton").text("Bid!").click(GameUI.click_bid);
+        let playerEntryDiv = document.querySelector("#playerEntryTmpl")
+            .content.cloneNode(true);
 
-        playerEntryDiv[0].querySelector(".playerEntryError").style = "visibility: hidden;";
+        playerEntryDiv.querySelector(".playerDelete")
+            .addEventListener("click", GameUI.click_deletePlayer);
 
-        playerEntryDiv.prepend(delPlayer);
-        playerEntryDiv.append(bidButton);
+        playerEntryDiv.querySelector(".bidButton")
+            .addEventListener("click", GameUI.click_bid);
 
-        jQuery("#playerEntryContainer").append(playerEntryDiv);
+        playerEntryDiv.querySelector(".playerEntryError")
+            .style = "visibility: hidden;";
+
+        document.querySelector("#playerEntryContainer")
+            .appendChild(playerEntryDiv);
     }
 
 

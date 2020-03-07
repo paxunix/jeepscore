@@ -17,6 +17,10 @@
       font-weight: bold;
     }
 
+    .playerBid {
+      width: 7ex;
+    }
+
     button {
       margin: 0.5em;
     }
@@ -57,11 +61,20 @@
     }
   </style>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
   <script src="jeepscore.js"></script>
 </head>
 
 <body>
+  <template id="playerEntryTmpl">
+    <div class="playerEntry">
+      <span class="playerDelete">&#x24cd;</span>
+      <input class="playerName" type="text" size="15" placeholder="Player name" minlength="1" required></input>
+      <input class="playerBid" type="number" size="4" placeholder="Bid" minlength="1" inputmode="numeric" required></input>
+      <span class="playerEntryError" title="Name and bid require values">&#x2757;</span>
+      <button class="bidButton">Bid!</button>
+    </div>
+  </template>
+
   <div class="game">
     <fieldset id="playerEntryPanel">
       <legend>Player Entry</legend>
