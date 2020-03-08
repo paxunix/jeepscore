@@ -58,7 +58,7 @@ class Player
     constructor(name, bid)
     {
         this.name = name;
-        this.bid = bid;
+        this.bid = Math.round(bid);
         this.id = Math.round(Math.random() * 10000000) + "";
 
         return this;
@@ -375,7 +375,8 @@ class GameUI
         let nameEl = entryEl.querySelector(".playerName");
 
         if (nameEl.value.trim() === "" ||
-            bidEl.value.trim() === "")
+            bidEl.value.trim() === "" ||
+            parseInt(bidEl.value, 10) < 0)
         {
             entryEl.querySelector(".playerEntryError").style = "visibility: visible;";
             return false;
