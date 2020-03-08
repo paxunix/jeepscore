@@ -77,6 +77,9 @@ class Player
 }
 
 
+const SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL = 0;
+const SCORE_ALGORITHM_PRICE_IS_RIGHT = 1;
+
 class Game
 {
     constructor(players)
@@ -85,6 +88,7 @@ class Game
         this.startTime = null;
         this.endTime = null;
         this.count = 0;
+        this.scoreAlgorithm = SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL;
 
         return this;
     }
@@ -161,6 +165,54 @@ class Game
     getEndTime()
     {
         return this.endTime;
+    }
+
+
+    getScoreData()
+    {
+        switch (this.scoreAlgorithm)
+        {
+            case SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL:
+                return this.getScore_minMaxSplitSpreadAll();
+
+            case SCORE_ALGORITHM_PRICE_IS_RIGHT:
+                return this.getScore_priceIsRight();
+        }
+
+        throw new Error("Unknown scoring algorithm");
+    }
+
+
+    getScore_minMaxSplitSpreadAll()
+    {
+        let scoreData = {};
+        let bids = this.getPlayers().map(p => p.getBid());
+        let min = Math.min(...bids);
+        let max = Math.max(...bids);
+        let splitSpread = Math.round((max - min) / this.getNumPlayers());
+
+        for (let p of this.getPlayers())
+        {
+            let playerMin = Math.max(0, p.getBid() - splitSpread);
+            let playerMax = p.getBid() + splitSpread;
+            let isLow = this.getCount() < playerMin;
+            let isHigh = this.getCount() > playerMax;
+
+            scoreData[p.getName()] = {
+                min: playerMin,
+                max: playerMax,
+                isLow: isLow,
+                isHigh: isHigh,
+                isWin: !isLow && !isHigh,
+            };
+        }
+
+        return scoreData;
+    }
+
+
+    getScore_priceIsRight()
+    {
     }
 
 
@@ -336,6 +388,13 @@ class GameUI
     {
         let counter = doc.querySelector(".counter");
         counter.textContent = game.getCount();
+
+        let scoreData = game.getScoreData();
+    }
+
+
+    static renderScore(game, scoreData)
+    {
     }
 
 
