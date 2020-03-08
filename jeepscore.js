@@ -330,7 +330,6 @@ class GameUI
 
     static start_click(evt)
     {
-        debugger;
         let players = GameUI.getEnteredPlayers();
 
         for (let entryEl of document.querySelectorAll(".playerEntry"))
@@ -343,7 +342,26 @@ class GameUI
         let currentGame = window.gameManager.getCurrentGame();
         document.querySelector("#counter").textContent = currentGame.getCount();
 
+        debugger;
+        GameUI.renderGamePlayers(currentGame);
         GameUI.setUiState_startGame();
+    }
+
+
+    static renderGamePlayers(game)
+    {
+        let container = document.querySelector("#playerContainer");
+
+        for (let p of game.getPlayers())
+        {
+            let playerDiv = document.querySelector("#playerInGameTmpl")
+                .content.cloneNode(true);
+
+            playerDiv.querySelector(".playerName").value = p.getName();
+            playerDiv.querySelector(".playerBid").value = p.getBid();
+
+            container.appendChild(playerDiv);
+        }
     }
 
 
