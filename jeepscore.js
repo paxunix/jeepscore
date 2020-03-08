@@ -129,6 +129,8 @@ class Game
             throw new Error("Can't decrement count if game hasn't started");
 
         --this.count;
+
+        this.count = Math.max(0, this.count);
     }
 
 
@@ -328,6 +330,29 @@ class GameUI
     }
 
 
+    static updateCounter(doc, game)
+    {
+        let counter = doc.querySelector(".counter");
+        counter.textContent = game.getCount();
+    }
+
+
+    static counter_click(evt)
+    {
+        let game = window.gameManager.getCurrentGame();
+        game.incCount();
+        GameUI.updateCounter(document, game);
+    }
+
+
+    static dec_click(evt)
+    {
+        let game = window.gameManager.getCurrentGame();
+        game.decCount();
+        GameUI.updateCounter(document, game);
+    }
+
+
     static start_click(evt)
     {
         let players = GameUI.getEnteredPlayers();
@@ -340,17 +365,18 @@ class GameUI
         window.gameManager.startGame(players);
 
         let currentGame = window.gameManager.getCurrentGame();
-        document.querySelector("#counter").textContent = currentGame.getCount();
 
-        debugger;
-        GameUI.renderGamePlayers(currentGame);
+        GameUI.renderGame(currentGame);
+
         GameUI.setUiState_startGame();
     }
 
 
-    static renderGamePlayers(game)
+    static renderGame(game)
     {
-        let container = document.querySelector("#playerContainer");
+        let gameContainer = document.querySelector("#gameContainerTmpl")
+            .content.cloneNode(true);
+        let playerContainer = gameContainer.querySelector(".playerContainer");
 
         for (let p of game.getPlayers())
         {
@@ -360,8 +386,23 @@ class GameUI
             playerDiv.querySelector(".playerName").value = p.getName();
             playerDiv.querySelector(".playerBid").value = p.getBid();
 
-            container.appendChild(playerDiv);
+            playerContainer.appendChild(playerDiv);
         }
+
+        gameContainer.querySelector(".counter")
+            .addEventListener("click", GameUI.counter_click);
+
+        gameContainer.querySelector(".inccount")
+            .addEventListener("click", GameUI.counter_click);
+
+        gameContainer.querySelector(".deccount")
+            .addEventListener("click", GameUI.dec_click);
+
+        GameUI.updateCounter(gameContainer, game);
+
+        let curGameContainer = document.querySelector("#gameContainer");
+        curGameContainer.innerHTML = "";
+        curGameContainer.appendChild(gameContainer);
     }
 
 
