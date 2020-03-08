@@ -265,6 +265,7 @@ class GameUI
 
         document.querySelector("#addPlayer").addEventListener("click", GameUI.click_addPlayer);
         document.querySelector("#startGame").addEventListener("click", GameUI.start_click);
+        document.querySelector("#resetGame").addEventListener("click", GameUI.reset_click);
 
         let currentGame = window.gameManager.getCurrentGame();
         if (!currentGame)
@@ -369,6 +370,14 @@ class GameUI
         GameUI.renderGame(currentGame);
 
         GameUI.setUiState_startGame();
+    }
+
+
+    static reset_click(evt)
+    {
+        window.gameManager.resetGame();
+
+        GameUI.setUiState_noGame();
     }
 
 
