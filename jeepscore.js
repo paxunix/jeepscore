@@ -38,7 +38,7 @@ class GameManager
         this.game.endGame();
         this.gameList.push(this.game);
 
-        this._init();
+        this.resetGame();
     }
 
 
@@ -265,6 +265,7 @@ class GameUI
 
         document.querySelector("#addPlayer").addEventListener("click", GameUI.click_addPlayer);
         document.querySelector("#startGame").addEventListener("click", GameUI.start_click);
+        document.querySelector("#endGame").addEventListener("click", GameUI.end_click);
         document.querySelector("#resetGame").addEventListener("click", GameUI.reset_click);
 
         let currentGame = window.gameManager.getCurrentGame();
@@ -370,6 +371,13 @@ class GameUI
         GameUI.renderGame(currentGame);
 
         GameUI.setUiState_startGame();
+    }
+
+
+    static end_click(evt)
+    {
+        window.gameManager.endGame();
+        GameUI.setUiState_noGame();
     }
 
 
