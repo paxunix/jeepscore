@@ -398,17 +398,33 @@ class GameUI
     }
 
 
-    static updateCounter(doc, game)
+    static updateCounter(gameContainer, game)
     {
-        let counter = doc.querySelector(".counter");
+        let counter = gameContainer.querySelector(".counter");
         counter.textContent = game.getCount();
 
         let scoreData = game.getScoreData();
+        GameUI.updateScore(gameContainer, scoreData);
     }
 
 
-    static renderScore(game, scoreData)
+    static updateScore(gameContainer, scoreData)
     {
+        for (let p of window.gameManager.getCurrentGame().getPlayers())
+        {
+            let playerDiv = gameContainer
+                .querySelector(`.playerInGame[data\-playerid="${p.getId()}"]`);
+            let playerNameInput = playerDiv.querySelector(".playerName");
+
+            if (scoreData[p.getId()].isLow)
+                playerNameInput.style = "background-color: yellow;";
+
+            if (scoreData[p.getId()].isWin)
+                playerNameInput.style = "background-color: limegreen;";
+
+            if (scoreData[p.getId()].isHigh)
+                playerNameInput.style = "background-color: salmon;";
+        }
     }
 
 
