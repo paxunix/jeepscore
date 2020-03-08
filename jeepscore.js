@@ -59,6 +59,7 @@ class Player
     {
         this.name = name;
         this.bid = bid;
+        this.id = Math.round(Math.random() * 10000000) + "";
 
         return this;
     }
@@ -67,6 +68,12 @@ class Player
     getName()
     {
         return this.name;
+    }
+
+
+    getId()
+    {
+        return this.id;
     }
 
 
@@ -147,6 +154,12 @@ class Game
     getPlayers()
     {
         return this.players;
+    }
+
+
+    getPlayerById(id)
+    {
+        return this.getPlayers().filter(p => p.getId() === id)[0] ?? null;
     }
 
 
@@ -481,6 +494,8 @@ class GameUI
 
             playerDiv.querySelector(".playerName").value = p.getName();
             playerDiv.querySelector(".playerBid").value = p.getBid();
+            playerDiv.querySelector(".playerInGame").dataset.playerid =
+                p.getId();
 
             playerContainer.appendChild(playerDiv);
         }
