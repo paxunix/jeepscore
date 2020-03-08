@@ -518,7 +518,7 @@ class GameUI
             let name = entry.querySelector(".playerName").value.trim();
             let bid = parseInt(entry.querySelector(".playerBid").value.trim(), 10);
 
-            if (name !== "" && bid > 0)
+            if (name !== "" && bid >= 0)
                 players.push(new Player(name, bid));
         }
 
