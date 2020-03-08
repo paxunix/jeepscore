@@ -449,6 +449,9 @@ class GameUI
 
     static end_click(evt)
     {
+        if (window.confirm("Are you sure you want to end this game?") !== true)
+            return;
+
         window.gameManager.endGame();
         GameUI.allowCounterActions(false,
             document.querySelector("#gameContainer"));
@@ -460,6 +463,9 @@ class GameUI
 
     static reset_click(evt)
     {
+        if (window.confirm("Are you sure you want to reset the game?") !== true)
+            return;
+
         window.gameManager.resetGame();
 
         GameUI.setUiState_noGame();
