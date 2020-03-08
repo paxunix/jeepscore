@@ -465,6 +465,24 @@ class GameUI
     }
 
 
+    static setUiState_allowEnd()
+    {
+        let allowEnd = false;
+
+        let currentGame = window.gameManager.getCurrentGame();
+        if (currentGame)
+        {
+            allowEnd = true;
+        }
+        else
+        {
+            allowEnd = false;
+        }
+
+        document.querySelector("#endGame").disabled = !allowEnd;
+    }
+
+
     static setUiState_allowReset()
     {
         let allowReset = false;
@@ -483,6 +501,7 @@ class GameUI
     {
         GameUI.setUiState_allowAddPlayer();
         GameUI.setUiState_allowStart();
+        GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
         document.querySelector("#playerEntryPanel").hidden = false;
         document.querySelector("#gamePanel").hidden = true;
@@ -493,6 +512,7 @@ class GameUI
     {
         GameUI.setUiState_allowAddPlayer();
         GameUI.setUiState_allowStart();
+        GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
         document.querySelector("#playerEntryPanel").hidden = true;
         document.querySelector("#gamePanel").hidden = false;
