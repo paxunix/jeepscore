@@ -211,7 +211,7 @@ class Game
             let isLow = this.getCount() < playerMin;
             let isHigh = this.getCount() > playerMax;
 
-            scoreData[p.getName()] = {
+            scoreData[p.getId()] = {
                 min: playerMin,
                 max: playerMax,
                 isLow: isLow,
