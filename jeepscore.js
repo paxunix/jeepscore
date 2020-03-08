@@ -377,7 +377,11 @@ class GameUI
     static end_click(evt)
     {
         window.gameManager.endGame();
-        GameUI.setUiState_noGame();
+        GameUI.allowCounterActions(false,
+            document.querySelector("#gameContainer"));
+        GameUI.setUiState_allowEnd();
+        // Don't reset UI here--let user click reset button so the UI state
+        // is preserved as of end of game.
     }
 
 
@@ -386,6 +390,22 @@ class GameUI
         window.gameManager.resetGame();
 
         GameUI.setUiState_noGame();
+    }
+
+
+    static allowCounterActions(enable, gameContainer)
+    {
+        gameContainer.querySelector(".counter")[
+            enable ? "addEventListener" : "removeEventListener"]
+                ("click", GameUI.counter_click);
+
+        gameContainer.querySelector(".inccount")[
+            enable ? "addEventListener" : "removeEventListener"]
+                ("click", GameUI.counter_click);
+
+        gameContainer.querySelector(".deccount")[
+            enable ? "addEventListener" : "removeEventListener"]
+                ("click", GameUI.dec_click);
     }
 
 
@@ -406,15 +426,7 @@ class GameUI
             playerContainer.appendChild(playerDiv);
         }
 
-        gameContainer.querySelector(".counter")
-            .addEventListener("click", GameUI.counter_click);
-
-        gameContainer.querySelector(".inccount")
-            .addEventListener("click", GameUI.counter_click);
-
-        gameContainer.querySelector(".deccount")
-            .addEventListener("click", GameUI.dec_click);
-
+        GameUI.allowCounterActions(true, gameContainer);
         GameUI.updateCounter(gameContainer, game);
 
         let curGameContainer = document.querySelector("#gameContainer");
