@@ -412,18 +412,20 @@ class GameUI
     {
         for (let p of window.gameManager.getCurrentGame().getPlayers())
         {
-            let playerDiv = gameContainer
+            let playerEl = gameContainer
                 .querySelector(`.playerInGame[data\-playerid="${p.getId()}"]`);
-            let playerNameInput = playerDiv.querySelector(".playerName");
 
             if (scoreData[p.getId()].isLow)
-                playerNameInput.style = "background-color: yellow;";
+                playerEl.style = "background-color: yellow;";
 
             if (scoreData[p.getId()].isWin)
-                playerNameInput.style = "background-color: limegreen;";
+                playerEl.style = "background-color: limegreen;";
 
             if (scoreData[p.getId()].isHigh)
-                playerNameInput.style = "background-color: salmon;";
+                playerEl.style = "background-color: salmon;";
+
+            playerEl.querySelector(".playerLow").textContent = scoreData[p.getId()].min;
+            playerEl.querySelector(".playerHigh").textContent = scoreData[p.getId()].max;
         }
     }
 
@@ -512,15 +514,15 @@ class GameUI
 
         for (let p of game.getPlayers())
         {
-            let playerDiv = document.querySelector("#playerInGameTmpl")
+            let playerRow = document.querySelector("#playerInGameRowTmpl")
                 .content.cloneNode(true);
 
-            playerDiv.querySelector(".playerName").value = p.getName();
-            playerDiv.querySelector(".playerBid").value = p.getBid();
-            playerDiv.querySelector(".playerInGame").dataset.playerid =
+            playerRow.querySelector(".playerName").textContent = p.getName();
+            playerRow.querySelector(".playerBid").textContent = p.getBid();
+            playerRow.querySelector(".playerInGame").dataset.playerid =
                 p.getId();
 
-            playerContainer.appendChild(playerDiv);
+            playerContainer.tBodies[0].appendChild(playerRow);
         }
 
         GameUI.allowCounterActions(true, gameContainer);

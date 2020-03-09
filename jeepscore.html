@@ -49,7 +49,21 @@
     }
 
     .playerInGame .playerName {
-      width: 50vw;
+      min-width: 50vw;
+    }
+
+    .playerInGame td {
+      vertical-align: middle;
+    }
+
+    .playerInGame .score {
+      text-align: center;
+      width: 33.33%;
+    }
+
+    .playerInGame .playerBid {
+      font-size: 115%;
+      font-weight: bold;
     }
   </style>
 
@@ -67,15 +81,24 @@
     </div>
   </template>
 
-  <template id="playerInGameTmpl">
-    <div class="playerInGame">
-      <input class="playerName" type="text" size="15" readonly></input>
-      <input class="playerBid" type="text" size="4" readonly></input>
-    </div>
+  <template id="playerInGameRowTmpl">
+    <tr class="playerInGame">
+      <td class="playerName"></td>
+      <td class="playerLow score"></td>
+      <td class="playerBid score"></td>
+      <td class="playerHigh score"></td>
+    </tr>
   </template>
 
   <template id="gameContainerTmpl">
-    <div class="playerContainer"></div>
+    <table class="playerContainer">
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Low</th>
+        <th scope="col">Bid</th>
+        <th scope="col">High</th>
+      </tr>
+    </table>
     <div class="countContainer">
       <div class="inccount">&#x25B2;</div>
       <div class="counter"></div>
