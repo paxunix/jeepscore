@@ -55,11 +55,13 @@ class GameManager
 
 class Player
 {
-    constructor(name, bid)
+    constructor(params)
     {
-        this.name = name;
-        this.bid = Math.round(bid);
-        this.id = Math.round(Math.random() * 10000000) + "";
+        this.data = {
+            name: params.name,
+            bid: Math.round(params.bid),
+            id: (params.id ?? Math.round(Math.random() * 10000000)) + "",
+        }
 
         return this;
     }
@@ -67,19 +69,19 @@ class Player
 
     getName()
     {
-        return this.name;
+        return this.data.name;
     }
 
 
     getId()
     {
-        return this.id;
+        return this.data.id;
     }
 
 
     getBid()
     {
-        return this.bid;
+        return this.data.bid;
     }
 }
 
@@ -528,7 +530,7 @@ class GameUI
             let bid = parseInt(entry.querySelector(".playerBid").value.trim(), 10);
 
             if (name !== "" && bid >= 0)
-                players.push(new Player(name, bid));
+                players.push(new Player({name, bid}));
         }
 
         return players;
