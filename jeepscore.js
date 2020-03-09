@@ -1,3 +1,5 @@
+const STORAGE_KEY_CURRENT = "jeepscore-CurrentGames";
+
 class GameManager
 {
     constructor()
@@ -10,7 +12,6 @@ class GameManager
     _init()
     {
         this.game = null;
-        this.gameList = [];
     }
 
 
@@ -22,6 +23,8 @@ class GameManager
 
     resetGame()
     {
+        GameManager.deleteSavedGame(this.getCurrentGame().getStartTime().toISOString());
+
         this.game = null;
     }
 
@@ -30,15 +33,62 @@ class GameManager
     {
         this.game = new Game({players});
         this.game.startGame();
+
+        GameManager.saveGame(this.game);
     }
 
 
     endGame()
     {
         this.getCurrentGame().endGame();
-        this.gameList.push(this.game);
+
+        GameManager.saveGame(this.game);
 
         this.resetGame();
+    }
+
+
+    static loadCurrentGames()
+    {
+        let jsonStr = localStorage.getItem(STORAGE_KEY_CURRENT) ?? "{}";
+        let gameData = JSON.parse(jsonStr);
+
+        // Convert stringified date objects back into date objects
+        for (let d of Object.keys(gameData))
+        {
+            if (gameData[d].startTime)
+                gameData[d].startTime = new Date(gameData[d].startTime);
+
+            if (gameData[d].endTime)
+                gameData[d].endTime = new Date(gameData[d].endTime);
+        }
+
+        return gameData;
+    }
+
+
+    static deleteSavedGame(time)
+    {
+        let data = GameManager.loadCurrentGames();
+
+        delete data[time];
+
+        GameManager.saveCurrentGameData(data);
+    }
+
+
+    static saveCurrentGameData(data)
+    {
+        localStorage.setItem(STORAGE_KEY_CURRENT, JSON.stringify(data ?? {}));
+    }
+
+
+    static saveGame(game)
+    {
+        let data = GameManager.loadCurrentGames();
+        data[game.getStartTime().toISOString()] = game.getRawData();
+
+        GameManager.saveCurrentGameData(data);
     }
 
 
@@ -231,9 +281,9 @@ class Game
     }
 
 
-    toJson()
+    getRawData()
     {
-        return JSON.stringify(this.data);
+        return Object.assign({}, this.data);
     }
 }
 
@@ -422,6 +472,8 @@ class GameUI
         let game = window.gameManager.getCurrentGame();
         game.incCount();
         GameUI.updateCounter(document, game);
+
+        GameManager.saveGame(game);
     }
 
 
@@ -430,6 +482,8 @@ class GameUI
         let game = window.gameManager.getCurrentGame();
         game.decCount();
         GameUI.updateCounter(document, game);
+
+        GameManager.saveGame(game);
     }
 
 
