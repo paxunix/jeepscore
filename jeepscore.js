@@ -28,14 +28,14 @@ class GameManager
 
     startGame(players)
     {
-        this.game = new Game(players);
+        this.game = new Game({players});
         this.game.startGame();
     }
 
 
     endGame()
     {
-        this.game.endGame();
+        this.getCurrentGame().endGame();
         this.gameList.push(this.game);
 
         this.resetGame();
@@ -89,13 +89,15 @@ const SCORE_ALGORITHM_PRICE_IS_RIGHT = 1;
 
 class Game
 {
-    constructor(players)
+    constructor(params)
     {
-        this.players = players;
-        this.startTime = null;
-        this.endTime = null;
-        this.count = 0;
-        this.scoreAlgorithm = SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL;
+        this.data = {
+            players: params.players,
+            startTime: params.startTime ?? null,
+            endTime: params.endTime ?? null,
+            count: params.count ?? 0,
+            scoreAlgorithm: params.scoreAlgorithm ?? SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL,
+        };
 
         return this;
     }
@@ -103,57 +105,55 @@ class Game
 
     startGame()
     {
-        if (this.startTime !== null)
+        if (this.getStartTime() !== null)
             throw new Error("Can't start a game that is already running");
 
-        if (this.endTime !== null)
+        if (this.getEndTime() !== null)
             throw new Error("Can't start a game that has ended");
 
-        this.startTime = new Date();
+        this.data.startTime = new Date();
     }
 
 
     endGame()
     {
-        if (this.startTime === null)
+        if (this.getStartTime() === null)
             throw new Error("Can't end a game that hasn't started");
 
-        if (this.endTime !== null)
+        if (this.getEndTime() !== null)
             throw new Error("Can't end a game that has already ended");
 
-        this.endTime = new Date();
+        this.data.endTime = new Date();
     }
 
 
     incCount()
     {
-        if (this.startTime === null)
+        if (this.getStartTime() === null)
             throw new Error("Can't increment count if game hasn't started");
 
-        ++this.count;
+        ++this.data.count;
     }
 
 
     decCount()
     {
-        if (this.startTime === null)
+        if (this.getStartTime() === null)
             throw new Error("Can't decrement count if game hasn't started");
 
-        --this.count;
-
-        this.count = Math.max(0, this.count);
+        this.data.count = Math.max(0, --this.data.count);
     }
 
 
     getCount()
     {
-        return this.count;
+        return this.data.count;
     }
 
 
     getPlayers()
     {
-        return this.players;
+        return this.data.players;
     }
 
 
@@ -165,25 +165,25 @@ class Game
 
     getNumPlayers()
     {
-        return this.players.length;
+        return this.getPlayers().length;
     }
 
 
     getStartTime()
     {
-        return this.startTime;
+        return this.data.startTime;
     }
 
 
     getEndTime()
     {
-        return this.endTime;
+        return this.data.endTime;
     }
 
 
     getScoreData()
     {
-        switch (this.scoreAlgorithm)
+        switch (this.data.scoreAlgorithm)
         {
             case SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL:
                 return this.getScore_minMaxSplitSpreadAll();
@@ -231,23 +231,8 @@ class Game
 
     toJson()
     {
-        return JSON.stringify({
-            players: this.players,
-            startTime: this.startTime,
-            endTime: this.endTime,
-            count: this.count,
-        });
+        return JSON.stringify(this.data);
     }
-
-    fromJson(str)
-    {
-        let o = JSON.parse(str);
-        this.players = o.players;
-        this.startTime = o.startTime;
-        this.endTime = o.endTime;
-        this.count = o.count;
-    }
-
 }
 
 
