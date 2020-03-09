@@ -473,6 +473,9 @@ class GameUI
 
         window.gameManager.resetGame();
 
+        let curGameContainer = document.querySelector("#gameContainer");
+        curGameContainer.innerHTML = "";
+
         GameUI.setUiState_noGame();
     }
 
