@@ -88,6 +88,11 @@ class GameManager
         let data = GameManager.loadCurrentGames();
         data[game.getStartTime().toISOString()] = game.getRawData();
 
+        // Keep the latest 10 current games
+        let dropDates = Object.keys(data).sort().slice(0, -10);
+        for (let d of dropDates)
+            delete data[d];
+
         GameManager.saveCurrentGameData(data);
     }
 
