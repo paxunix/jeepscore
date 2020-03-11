@@ -25,13 +25,19 @@ class GameManager
     {
         GameManager.deleteSavedGame(this.getCurrentGame().getStartTime().toISOString());
 
-        this.game = null;
+        this._init();
+    }
+
+
+    setGame(game)
+    {
+        this.game = game;
     }
 
 
     startGame(players)
     {
-        this.game = new Game({players});
+        this.setGame(new Game({players}));
         this.game.startGame();
 
         GameManager.saveGame(this.game);
@@ -44,7 +50,23 @@ class GameManager
 
         GameManager.saveGame(this.game);
 
-        this.resetGame();
+        this._init();
+    }
+
+
+    static getLatestSavedGame()
+    {
+        let savedData = GameManager.loadCurrentGames();
+        let gameDates = Object.keys(savedData);
+        let newestDate = gameDates.sort().slice(-1)[0];
+
+        if (newestDate)
+        {
+            return new Game(savedData[newestDate]);
+        }
+
+
+        return null;
     }
 
 
@@ -52,16 +74,6 @@ class GameManager
     {
         let jsonStr = localStorage.getItem(STORAGE_KEY_CURRENT) ?? "{}";
         let gameData = JSON.parse(jsonStr);
-
-        // Convert stringified date objects back into date objects
-        for (let d of Object.keys(gameData))
-        {
-            if (gameData[d].startTime)
-                gameData[d].startTime = new Date(gameData[d].startTime);
-
-            if (gameData[d].endTime)
-                gameData[d].endTime = new Date(gameData[d].endTime);
-        }
 
         return gameData;
     }
@@ -112,10 +124,12 @@ class Player
 {
     constructor(params)
     {
+        let fromObj = params.data ?? params;
+
         this.data = {
-            name: params.name,
-            bid: Math.round(params.bid),
-            id: (params.id ?? Math.round(Math.random() * 10000000)) + "",
+            name: fromObj.name,
+            bid: Math.round(fromObj.bid),
+            id: (fromObj.id ?? Math.round(Math.random() * 10000000)) + "",
         }
 
         return this;
@@ -148,12 +162,30 @@ class Game
 {
     constructor(params)
     {
+        let fromObj = params.data ?? params;
+
+        // Since we may be constructing from raw data, turn it into objects
+        // if necessary.
+        let players = [];
+        for (let p of fromObj.players)
+        {
+            if (p instanceof Player)
+                players.push(p);
+            else
+            {
+                players.push(new Player(p));
+            }
+        }
+
+        let startTime = fromObj.startTime ? new Date(fromObj.startTime) : null;
+        let endTime = fromObj.endTime ? new Date(fromObj.endTime) : null;
+
         this.data = {
-            players: params.players,
-            startTime: params.startTime ?? null,
-            endTime: params.endTime ?? null,
-            count: params.count ?? 0,
-            scoreAlgorithm: params.scoreAlgorithm ?? SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL,
+            players: players,
+            startTime: startTime,
+            endTime: endTime,
+            count: fromObj.count ?? 0,
+            scoreAlgorithm: fromObj.scoreAlgorithm ?? SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL,
         };
 
         return this;
@@ -375,9 +407,18 @@ class GameUI
         document.querySelector("#endGame").addEventListener("click", GameUI.end_click);
         document.querySelector("#resetGame").addEventListener("click", GameUI.reset_click);
 
-        let currentGame = window.gameManager.getCurrentGame();
-        if (!currentGame)
+        let latestGame = GameManager.getLatestSavedGame();
+        if (!latestGame)
             GameUI.setUiState_noGame();
+        else
+        {
+            window.gameManager.setGame(latestGame);
+            GameUI.renderGame(latestGame);
+            GameUI.setUiState_startGame();
+
+            GameUI.allowCounterActions(false,
+                document.querySelector("#gameContainer"));
+        }
     }
 
 
@@ -446,13 +487,13 @@ class GameUI
         counter.textContent = game.getCount();
 
         let scoreData = game.getScoreData();
-        GameUI.updateScore(gameContainer, scoreData);
+        GameUI.updateScore(gameContainer, game, scoreData);
     }
 
 
-    static updateScore(gameContainer, scoreData)
+    static updateScore(gameContainer, game, scoreData)
     {
-        for (let p of window.gameManager.getCurrentGame().getPlayers())
+        for (let p of game.getPlayers())
         {
             let playerEl = gameContainer
                 .querySelector(`.playerInGame[data\-playerid="${p.getId()}"]`);
@@ -638,7 +679,7 @@ class GameUI
         let allowEnd = false;
 
         let currentGame = window.gameManager.getCurrentGame();
-        if (currentGame)
+        if (currentGame && !currentGame.getEndTime())
         {
             allowEnd = true;
         }
