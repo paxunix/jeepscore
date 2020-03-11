@@ -415,9 +415,6 @@ class GameUI
             window.gameManager.setGame(latestGame);
             GameUI.renderGame(latestGame);
             GameUI.setUiState_startGame();
-
-            GameUI.allowCounterActions(false,
-                document.querySelector("#gameContainer"));
         }
     }
 
@@ -615,7 +612,7 @@ class GameUI
             playerContainer.tBodies[0].appendChild(playerRow);
         }
 
-        GameUI.allowCounterActions(true, gameContainer);
+        GameUI.allowCounterActions(!game.getEndTime(), gameContainer);
         GameUI.updateCounter(gameContainer, game);
 
         let curGameContainer = document.querySelector("#gameContainer");
