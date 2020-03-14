@@ -435,6 +435,13 @@ class GameUI
 
         document.querySelector("#playerEntryContainer")
             .appendChild(playerEntryDiv);
+
+        // Defer setting focus to latest player name input until UI has
+        // updated or it won't be set.
+        window.setTimeout(() => {
+            Array.from(document.querySelectorAll(".playerName"))
+                .slice(-1)[0].focus();
+        }, 0);
     }
 
 
