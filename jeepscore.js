@@ -49,8 +49,6 @@ class GameManager
         this.getCurrentGame().endGame();
 
         GameManager.saveGame(this.game);
-
-        this._init();
     }
 
 
