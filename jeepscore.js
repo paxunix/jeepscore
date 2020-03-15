@@ -107,16 +107,6 @@ class GameManager
 
         GameManager.saveCurrentGameData(data);
     }
-
-
-    getHistoricalGames()
-    {
-    }
-
-
-    exportHistoricalData()
-    {
-    }
 }
 
 
