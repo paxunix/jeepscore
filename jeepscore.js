@@ -392,7 +392,7 @@ function getPrettyElapsedTime(elapsedSeconds, ...units)
         }
     }
 
-    return out.join(" ");
+    return out.length === 0 ? "0s" : out.join(" ");
 }
 
 
@@ -517,6 +517,33 @@ class GameUI
     }
 
 
+    static updateTimes(container, game)
+    {
+        let startTime = game.getStartTime();
+        container.querySelector(".startTimeValue").textContent =
+            startTime.toLocaleString();
+
+        let endTimeRow = container.querySelector(".endTime");
+        let endTime = game.getEndTime();
+        if (endTime)
+        {
+            container.querySelector(".endTimeValue").textContent =
+                endTime.toLocaleString();
+
+            endTimeRow.hidden = false;
+        }
+        else
+            endTimeRow.hidden = true;
+
+        endTime = endTime ?? new Date();
+        let elapsedPrettyTime = getPrettyElapsedTime(
+            Math.ceil((endTime.getTime() - startTime.getTime()) / 1000));
+
+        container.querySelector(".elapsedTimeValue")
+            .textContent = elapsedPrettyTime;
+    }
+
+
     static counter_click(evt)
     {
         let game = window.gameManager.getCurrentGame();
@@ -561,10 +588,16 @@ class GameUI
         if (window.confirm("Are you sure you want to end this game?") !== true)
             return;
 
+        let currentGame = window.gameManager.getCurrentGame();
+
         window.gameManager.endGame();
+
+        GameUI.updateTimes(document.querySelector(".timeTable"), currentGame);
+
         GameUI.allowCounterActions(false,
             document.querySelector("#gameContainer"));
         GameUI.setUiState_allowEnd();
+
         // Don't reset UI here--let user click reset button so the UI state
         // is preserved as of end of game.
     }
@@ -581,6 +614,20 @@ class GameUI
         curGameContainer.innerHTML = "";
 
         GameUI.setUiState_noGame();
+    }
+
+
+    static body_click(evt)
+    {
+        let currentGame = window.gameManager.getCurrentGame();
+        if (currentGame)
+            GameUI.updateTimes(document.querySelector(".timeTable"), currentGame);
+    }
+
+
+    static allowBodyClick()
+    {
+        document.body.addEventListener("click", GameUI.body_click);
     }
 
 
@@ -621,6 +668,8 @@ class GameUI
 
         GameUI.allowCounterActions(!game.getEndTime(), gameContainer);
         GameUI.updateCounter(gameContainer, game);
+
+        GameUI.updateTimes(gameContainer, game);
 
         let curGameContainer = document.querySelector("#gameContainer");
         curGameContainer.innerHTML = "";
@@ -729,5 +778,7 @@ class GameUI
         GameUI.setUiState_allowReset();
         document.querySelector("#playerEntryPanel").hidden = true;
         document.querySelector("#gamePanel").hidden = false;
+
+        GameUI.allowBodyClick(true);
     }
 }

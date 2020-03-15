@@ -64,6 +64,10 @@
       font-size: 115%;
       font-weight: bold;
     }
+
+    .timeTable {
+      font-size: 80%;
+    }
   </style>
 
   <script src="jeepscore.js"></script>
@@ -90,6 +94,18 @@
   </template>
 
   <template id="gameContainerTmpl">
+    <table class="timeTable">
+      <tr class="startTime">
+        <td>Started:</td> <td class="startTimeValue"></td>
+      </tr>
+      <tr class="endTime">
+        <td>Ended:</td> <td class="endTimeValue"></td>
+      </tr>
+      <tr class="elapsedTime">
+        <td>Elapsed:</td> <td class="elapsedTimeValue"></td>
+      </tr>
+    </table>
+    <hr/>
     <table class="playerContainer">
       <tr>
         <th scope="col">Name</th>
