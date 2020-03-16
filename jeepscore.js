@@ -23,7 +23,7 @@ class GameManager
 
     resetGame()
     {
-        GameManager.deleteSavedGame(this.getCurrentGame().getStartTime().toISOString());
+        GameManager.deleteSavedGame(this.getCurrentGame().getId());
 
         this._init();
     }
@@ -96,7 +96,7 @@ class GameManager
     static saveGame(game)
     {
         let data = GameManager.loadCurrentGames();
-        data[game.getStartTime().toISOString()] = game.getRawData();
+        data[game.getId()] = game.getRawData();
 
         // Keep the latest 10 current games
         let dropDates = Object.keys(data).sort().slice(0, -10);
@@ -309,6 +309,12 @@ class Game
     getRawData()
     {
         return Object.assign({}, this.data);
+    }
+
+
+    getId()
+    {
+        return this.getStartTime().toISOString();
     }
 }
 
