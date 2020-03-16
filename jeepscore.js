@@ -11,7 +11,7 @@ class GameManager
 
     _init()
     {
-        this.game = null;
+        this.setGame(null);
     }
 
 
@@ -46,9 +46,10 @@ class GameManager
 
     endGame()
     {
-        this.getCurrentGame().endGame();
+        let game = this.getCurrentGame();
+        game.endGame();
 
-        GameManager.saveGame(this.game);
+        GameManager.saveGame(game);
     }
 
 
@@ -62,7 +63,6 @@ class GameManager
         {
             return new Game(savedData[newestDate]);
         }
-
 
         return null;
     }
