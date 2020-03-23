@@ -605,7 +605,7 @@ class GameUI
         window.gameManager.resetGame();
 
         let curGameContainer = document.querySelector("#gameContainer");
-        curGameContainer.innerHTML = "";
+        GameUI.replaceChildrenWithElement(curGameContainer, null);
 
         GameUI.setUiState_noGame();
     }
@@ -666,8 +666,7 @@ class GameUI
         GameUI.updateTimes(gameContainer, game);
 
         let curGameContainer = document.querySelector("#gameContainer");
-        curGameContainer.innerHTML = "";
-        curGameContainer.appendChild(gameContainer);
+        GameUI.replaceChildrenWithElement(curGameContainer, gameContainer);
     }
 
 
@@ -774,5 +773,15 @@ class GameUI
         document.querySelector("#gamePanel").hidden = false;
 
         GameUI.allowBodyClick(true);
+    }
+
+
+    static replaceChildrenWithElement(targetEl, newEl)
+    {
+        while (targetEl.firstChild)
+            targetEl.firstChild.remove();
+
+        if (newEl)
+            targetEl.appendChild(newEl);
     }
 }
