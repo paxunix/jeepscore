@@ -178,7 +178,7 @@
     </label>
   </template>
 
-  <div class="game">
+  <template id="newGameTmpl">
     <fieldset id="playerEntryPanel">
       <legend>New Game</legend>
         <div>
@@ -189,7 +189,10 @@
           </div>
         </div>
     </fieldset>
+  </template>
 
+  <div class="game">
+    <div id="newGameSlot"></div>
     <fieldset id="gamePanel">
       <legend>Game On!</legend>
       <div>

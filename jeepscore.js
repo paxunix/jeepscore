@@ -396,8 +396,8 @@ class GameUI
     {
         window.gameManager = new GameManager();
 
-        document.querySelector("#addPlayer").addEventListener("click", GameUI.click_addPlayer);
-        document.querySelector("#startGame").addEventListener("click", GameUI.start_click);
+        GameUI.setUiState_allowNewGame();
+
         document.querySelector("#endGame").addEventListener("click", GameUI.end_click);
         document.querySelector("#resetGame").addEventListener("click", GameUI.reset_click);
 
@@ -796,6 +796,29 @@ class GameUI
         document.querySelector("#loadGameButton").disabled = !hasSavedGames;
         document.querySelector("#deleteGameButton").disabled = !hasSavedGames;
         document.querySelector("#deleteAllGamesButton").disabled = !hasSavedGames;
+    }
+
+
+    static setUiState_allowNewGame()
+    {
+        let newGameTmpl = document
+            .querySelector("#newGameTmpl")
+            .content.cloneNode(true);
+
+        GameUI.makeLegend("New Game",
+            newGameTmpl.querySelector("fieldset"));
+
+        newGameTmpl.querySelector("#addPlayer")
+            .addEventListener("click", GameUI.click_addPlayer);
+        newGameTmpl.querySelector("#startGame")
+            .addEventListener("click", GameUI.start_click);
+
+        GameUI.replaceChildrenWithElement(document.querySelector("#newGameSlot"), newGameTmpl);
+
+        GameUI.setUiState_allowAddPlayer();
+        GameUI.setUiState_allowStart();
+        GameUI.setUiState_allowEnd();
+        GameUI.setUiState_allowReset();
     }
 
 
