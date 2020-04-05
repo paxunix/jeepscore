@@ -595,6 +595,7 @@ class GameUI
             document.querySelector("#gameContainer"));
         GameUI.setUiState_allowEnd();
 
+        GameUI.setUiState_allowPastGameSelection();
         // Don't reset UI here--let user click reset button so the UI state
         // is preserved as of end of game.
     }
@@ -611,6 +612,8 @@ class GameUI
         GameUI.replaceChildrenWithElement(curGameContainer, null);
 
         GameUI.setUiState_noGame();
+
+        GameUI.setUiState_allowPastGameSelection();
     }
 
 
