@@ -100,6 +100,10 @@
     .playerContainer {
       width: 100%;
     }
+
+    .buttonRow {
+      margin-top: 1ex;
+    }
   </style>
 
   <script src="jeepscore.js"></script>
@@ -155,14 +159,16 @@
 
   <template id="pastGamesContainerTmpl">
     <fieldset id="pastGamesPanel">
-      <div class="pastGamesList">
+      <div>
+        <div class="pastGamesList">
+        </div>
+        <div class="buttonRow">
+          <button id="loadGameButton">Load</button>
+          <button id="deleteGameButton">Delete</button>
+          <button id="deleteAllGamesButton">Delete All Games</button>
+        </div>
       </div>
     </fieldset>
-    <div>
-      <button id="loadGameButton">Load</button>
-      <button id="deleteGameButton">Delete</button>
-      <button id="deleteAllGamesButton">Delete All Games</button>
-    </div>
   </template>
 
   <template id="pastGameTmpl">
@@ -175,19 +181,27 @@
   <div class="game">
     <fieldset id="playerEntryPanel">
       <legend>New Game</legend>
-        <div id="playerEntryContainer"></div>
-        <button id="addPlayer">Add Player</button>
+        <div>
+          <div id="playerEntryContainer"></div>
+          <div class="buttonRow">
+            <button id="addPlayer">Add Player</button>
+          </div>
+        </div>
     </fieldset>
 
     <fieldset id="gamePanel">
       <legend>Game On!</legend>
-      <div id="gameContainer">
+      <div>
+        <div id="gameContainer">
+        </div>
+        <div class="buttonRow">
+          <button id="endGame">End</button>
+          <button id="resetGame">Reset</button>
+        </div>
       </div>
     </fieldset>
 
     <button id="startGame">Start</button>
-    <button id="endGame">End</button>
-    <button id="resetGame">Reset</button>
 
     <div id="pastGamesContainer">
     </div>
