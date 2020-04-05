@@ -78,6 +78,25 @@
       font-weight: bold;
     }
 
+    .pastGamesList {
+      font-family: monospace;
+      font-size: 120%;
+      width: 100%;
+    }
+
+    .pastGameLabel {
+      display: block;
+      width: 100%;
+    }
+
+    .pastGameLabelCurrent {
+      background-color: cyan;
+    }
+
+    #pastGamesPanel {
+      margin-top: 2ex;
+    }
+
     .playerContainer {
       width: 100%;
     }
@@ -134,6 +153,26 @@
     </div>
   </template>
 
+  <template id="pastGamesContainerTmpl">
+    <fieldset id="pastGamesPanel">
+      <legend>Saved Games</legend>
+      <div class="pastGamesList">
+      </div>
+    </fieldset>
+    <div>
+      <button id="loadGameButton">Load</button>
+      <button id="deleteGameButton">Delete</button>
+      <button id="deleteAllGamesButton">Delete All Games</button>
+    </div>
+  </template>
+
+  <template id="pastGameTmpl">
+    <label class="pastGameLabel">
+      <input type="checkbox"></input>
+      <span class="labelText"</span>
+    </label>
+  </template>
+
   <div class="game">
     <fieldset id="playerEntryPanel">
       <legend>New Game</legend>
@@ -150,6 +189,9 @@
     <button id="startGame">Start</button>
     <button id="endGame">End</button>
     <button id="resetGame">Reset</button>
+
+    <div id="pastGamesContainer">
+    </div>
   </div>
 
 <script>

@@ -410,6 +410,8 @@ class GameUI
             GameUI.renderGame(latestGame);
             GameUI.setUiState_startGame();
         }
+
+        GameUI.setUiState_allowPastGameSelection();
     }
 
 
@@ -574,6 +576,7 @@ class GameUI
         GameUI.renderGame(currentGame);
 
         GameUI.setUiState_startGame();
+        GameUI.setUiState_allowPastGameSelection();
     }
 
 
@@ -773,6 +776,67 @@ class GameUI
         document.querySelector("#gamePanel").hidden = false;
 
         GameUI.allowBodyClick(true);
+    }
+
+
+    static setUiState_allowPastGameSelection()
+    {
+        GameUI.setUiState_allowAddPlayer();
+        GameUI.setUiState_allowStart();
+        GameUI.setUiState_allowEnd();
+        GameUI.setUiState_allowReset();
+
+        GameUI.renderPastGames(document,
+            document.querySelector("#pastGamesContainer"));
+
+        let hasSavedGames = !!GameManager.getLatestSavedGame();
+        document.querySelector("#loadGameButton").disabled = !hasSavedGames;
+        document.querySelector("#deleteGameButton").disabled = !hasSavedGames;
+        document.querySelector("#deleteAllGamesButton").disabled = !hasSavedGames;
+    }
+
+
+    static renderPastGames(templateDoc, destEl)
+    {
+        let pastGamesTmpl = templateDoc
+            .querySelector("#pastGamesContainerTmpl")
+            .content.cloneNode(true);
+        let $list = pastGamesTmpl.querySelector(".pastGamesList");
+
+        let rawGamesData = GameManager.loadCurrentGames();
+
+        if (Object.keys(rawGamesData).length === 0)
+        {
+            $list.innerText = "No games saved";
+        }
+        else
+        {
+            let currentGame = window.gameManager.getCurrentGame();
+
+            for (let k of Object.keys(rawGamesData))
+            {
+                let game = new Game(rawGamesData[k]);
+                let isGameOver = game.getEndTime() !== null;
+
+                let pastGameTmpl = templateDoc.querySelector("#pastGameTmpl")
+                    .content.cloneNode(true);
+                let $input = pastGameTmpl.querySelector("input");
+                let $label = pastGameTmpl.querySelector("label");
+                let $text = pastGameTmpl.querySelector("span");
+
+                $text.innerHTML = `${game.getStartTime().toLocaleString()}${isGameOver ? "&nbsp;&#x1F3C1" : ""}`;
+                $input.value = game.getId();
+
+                if (currentGame && currentGame.getId() === game.getId())
+                {
+                    $label.classList.add("pastGameLabelCurrent");
+                }
+
+                $list.appendChild($label);
+            }
+        }
+
+        GameUI.replaceChildrenWithElement(destEl, pastGamesTmpl);
     }
 
 
