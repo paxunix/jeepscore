@@ -801,6 +801,10 @@ class GameUI
         let pastGamesTmpl = templateDoc
             .querySelector("#pastGamesContainerTmpl")
             .content.cloneNode(true);
+
+        GameUI.makeLegend("Saved Games",
+            pastGamesTmpl.querySelector("fieldset"));
+
         let $list = pastGamesTmpl.querySelector(".pastGamesList");
 
         let rawGamesData = GameManager.loadCurrentGames();
@@ -847,5 +851,29 @@ class GameUI
 
         if (newEl)
             targetEl.appendChild(newEl);
+    }
+
+
+    static click_toggleFieldsetContent(evt)
+    {
+        let $fieldSetContent = evt.target.closest("fieldset").querySelector("div");
+        if ($fieldSetContent)
+        {
+            $fieldSetContent.hidden = !$fieldSetContent.hidden;
+        }
+    }
+
+
+    static makeLegend(text, $fieldset)
+    {
+        let $legend = document.createElement("legend");
+        $legend.textContent = text;
+        $legend.addEventListener("click", GameUI.click_toggleFieldsetContent);
+
+        let $currentLegend = $fieldset.querySelector("legend");
+        if ($currentLegend)
+            $currentLegend.replaceWith($legend);
+        else
+            $fieldset.prepend($legend);
     }
 }
