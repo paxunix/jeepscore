@@ -697,13 +697,6 @@ class GameUI
     }
 
 
-    static setUiState_noGame()
-    {
-        GameUI.setUiState_allowEnd();
-        document.querySelector("#playerEntryPanel").hidden = false;
-    }
-
-
     static setUiState_startGame()
     {
         GameUI.setUiState_allowStart();
