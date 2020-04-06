@@ -21,14 +21,6 @@ class GameManager
     }
 
 
-    resetGame()
-    {
-        GameManager.deleteSavedGame(this.getCurrentGame().getId());
-
-        this._init();
-    }
-
-
     setGame(game)
     {
         this.game = game;
@@ -585,22 +577,6 @@ class GameUI
         gameContainer.classList.add("finishedGame");
 
         GameUI.setUiState_allowEnd();
-        // Don't reset UI here--let user click reset button so the UI state
-        // is preserved as of end of game.
-    }
-
-
-    static reset_click(evt)
-    {
-        if (window.confirm("Are you sure you want to reset the game?") !== true)
-            return;
-
-        window.gameManager.resetGame();
-
-        let curGameSlot = document.querySelector("#currentGameSlot");
-        GameUI.replaceChildrenWithElement(curGameSlot, null);
-
-        GameUI.setUiState_noGame();
     }
 
 
@@ -644,8 +620,6 @@ class GameUI
 
         gameContainer.querySelector("#endGame")
             .addEventListener("click", GameUI.end_click);
-        gameContainer.querySelector("#resetGame")
-            .addEventListener("click", GameUI.reset_click);
 
         let playerContainer = gameContainer.querySelector(".playerContainer");
 
@@ -723,26 +697,9 @@ class GameUI
     }
 
 
-    static setUiState_allowReset()
-    {
-        let allowReset = false;
-
-        let currentGame = window.gameManager.getCurrentGame();
-        if (currentGame)
-        {
-            allowReset = true;
-        }
-
-        let el = document.querySelector("#resetGame");
-        if (el)
-            el.disabled = !allowReset;
-    }
-
-
     static setUiState_noGame()
     {
         GameUI.setUiState_allowEnd();
-        GameUI.setUiState_allowReset();
         document.querySelector("#playerEntryPanel").hidden = false;
     }
 
@@ -751,7 +708,6 @@ class GameUI
     {
         GameUI.setUiState_allowStart();
         GameUI.setUiState_allowEnd();
-        GameUI.setUiState_allowReset();
     }
 
 
@@ -797,7 +753,6 @@ class GameUI
             document.querySelector("#currentGameSlot"));
 
         GameUI.setUiState_allowEnd();
-        GameUI.setUiState_allowReset();
     }
 
 
