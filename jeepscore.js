@@ -696,7 +696,9 @@ class GameUI
             allowAddPlayer = true;
         }
 
-        document.querySelector("#addPlayer").disabled = !allowAddPlayer;
+        let el = document.querySelector("#addPlayer");
+        if (el)
+            el.disabled = !allowAddPlayer;
     }
 
 
@@ -717,7 +719,9 @@ class GameUI
                 allowStart = false;
         }
 
-        document.querySelector("#startGameButton").disabled = !allowStart;
+        let el = document.querySelector("#startGameButton");
+        if (el)
+            el.disabled = !allowStart;
     }
 
 
@@ -735,7 +739,9 @@ class GameUI
             allowEnd = false;
         }
 
-        document.querySelector("#endGame").disabled = !allowEnd;
+        let el = document.querySelector("#endGame")
+        if (el)
+            el.disabled = !allowEnd;
     }
 
 
@@ -749,7 +755,9 @@ class GameUI
             allowReset = true;
         }
 
-        document.querySelector("#resetGame").disabled = !allowReset;
+        let el = document.querySelector("#resetGame");
+        if (el)
+            el.disabled = !allowReset;
     }
 
 
@@ -785,9 +793,17 @@ class GameUI
             document.querySelector("#pastGamesSlot"));
 
         let hasSavedGames = !!GameManager.getLatestSavedGame();
-        document.querySelector("#loadGameButton").disabled = !hasSavedGames;
-        document.querySelector("#deleteGameButton").disabled = !hasSavedGames;
-        document.querySelector("#deleteAllGamesButton").disabled = !hasSavedGames;
+        let el = document.querySelector("#loadGameButton");
+        if (el)
+            el.disabled = !hasSavedGames;
+
+        el = document.querySelector("#deleteGameButton");
+        if (el)
+           el.disabled = !hasSavedGames;
+
+        el = document.querySelector("#deleteAllGamesButton");
+        if (el)
+            el.disabled = !hasSavedGames;
     }
 
 
