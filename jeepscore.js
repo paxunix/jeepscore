@@ -593,8 +593,8 @@ class GameUI
 
         window.gameManager.resetGame();
 
-        let curGameContainer = document.querySelector("#gameContainer");
-        GameUI.replaceChildrenWithElement(curGameContainer, null);
+        let curGameSlot = document.querySelector("#currentGameSlot");
+        GameUI.replaceChildrenWithElement(curGameSlot, null);
 
         GameUI.setUiState_noGame();
     }
