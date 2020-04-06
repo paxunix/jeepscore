@@ -496,14 +496,14 @@ class GameUI
     {
         let startTime = game.getStartTime();
         container.querySelector(".startTimeValue").textContent =
-            startTime.toLocaleString();
+            GameUI.formatDateTime(startTime);
 
         let endTimeRow = container.querySelector(".endTime");
         let endTime = game.getEndTime();
         if (endTime)
         {
             container.querySelector(".endTimeValue").textContent =
-                endTime.toLocaleString();
+                GameUI.formatDateTime(endTime);
 
             endTimeRow.hidden = false;
         }
@@ -780,7 +780,7 @@ class GameUI
                 let $label = pastGameTmpl.querySelector("label");
                 let $text = pastGameTmpl.querySelector("span");
 
-                $text.innerHTML = `${game.getStartTime().toLocaleString()}${isGameOver ? "&nbsp;&#x1F3C1" : ""}`;
+                $text.innerHTML = `${GameUI.formatDateTime(game.getStartTime())}${isGameOver ? "&nbsp;&#x1F3C1" : ""}`;
                 $input.value = game.getId();
 
                 if (currentGame && currentGame.getId() === game.getId())
@@ -835,5 +835,14 @@ class GameUI
     static cloneFromTemplate(doc, tmplSelector)
     {
         return doc.querySelector(tmplSelector).content.cloneNode(true);
+    }
+
+
+    static formatDateTime(dateObj)
+    {
+        return new Intl.DateTimeFormat(undefined, {
+                dateStyle: "long",
+                timeStyle: "long",
+            }).format(dateObj);
     }
 }
