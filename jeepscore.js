@@ -815,7 +815,7 @@ class GameUI
         {
             let currentGame = window.gameManager.getCurrentGame();
 
-            for (let k of Object.keys(rawGamesData))
+            for (let k of Object.keys(rawGamesData).sort((a, b) => b.localeCompare(a)))
             {
                 let game = new Game(rawGamesData[k]);
                 let isGameOver = game.getEndTime() !== null;
