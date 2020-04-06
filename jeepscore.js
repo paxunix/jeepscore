@@ -682,21 +682,6 @@ class GameUI
     }
 
 
-    static setUiState_allowAddPlayer()
-    {
-        let allowAddPlayer = false;
-
-        if (window.gameManager.getCurrentGame() === null)
-        {
-            allowAddPlayer = true;
-        }
-
-        let el = document.querySelector("#addPlayer");
-        if (el)
-            el.disabled = !allowAddPlayer;
-    }
-
-
     static setUiState_allowStart()
     {
         let allowStart = false;
@@ -758,7 +743,6 @@ class GameUI
 
     static setUiState_noGame()
     {
-        GameUI.setUiState_allowAddPlayer();
         GameUI.setUiState_allowStart();
         GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
@@ -768,7 +752,6 @@ class GameUI
 
     static setUiState_startGame()
     {
-        GameUI.setUiState_allowAddPlayer();
         GameUI.setUiState_allowStart();
         GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
@@ -803,7 +786,6 @@ class GameUI
 
         GameUI.replaceChildrenWithElement(document.querySelector("#newGameSlot"), newGameTmpl);
 
-        GameUI.setUiState_allowAddPlayer();
         GameUI.setUiState_allowStart();
     }
 
@@ -821,7 +803,6 @@ class GameUI
 
         GameUI.setUiState_startGame();
 
-        GameUI.setUiState_allowAddPlayer();
         GameUI.setUiState_allowStart();
         GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
