@@ -551,10 +551,7 @@ class GameUI
     {
         let players = GameUI.getEnteredPlayers();
 
-        for (let entryEl of document.querySelectorAll(".playerEntry"))
-        {
-            entryEl.remove();
-        }
+        GameUI.replaceChildrenWithElement(document.querySelector("#playerEntryContainer"), null);
 
         window.gameManager.startGame(players);
 
