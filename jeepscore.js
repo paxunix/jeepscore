@@ -396,9 +396,9 @@ class GameUI
     {
         window.gameManager = new GameManager();
 
-        GameUI.setUiState_allowNewGame();
-        GameUI.setUiState_allowCurrentGame();
-        GameUI.setUiState_allowPastGameSelection();
+        GameUI.setupNewGameUi();
+        GameUI.setupCurrentGameUi();
+        GameUI.setupPastGamesUi();
     }
 
 
@@ -564,7 +564,6 @@ class GameUI
             document.querySelector("#currentGameSlot"));
 
         GameUI.setUiState_startGame();
-        GameUI.setUiState_allowPastGameSelection();
     }
 
 
@@ -582,8 +581,6 @@ class GameUI
         GameUI.allowCounterActions(false,
             document.querySelector("#gameContainer"));
         GameUI.setUiState_allowEnd();
-
-        GameUI.setUiState_allowPastGameSelection();
         // Don't reset UI here--let user click reset button so the UI state
         // is preserved as of end of game.
     }
@@ -600,8 +597,6 @@ class GameUI
         GameUI.replaceChildrenWithElement(curGameContainer, null);
 
         GameUI.setUiState_noGame();
-
-        GameUI.setUiState_allowPastGameSelection();
     }
 
 
@@ -782,32 +777,19 @@ class GameUI
     }
 
 
-    static setUiState_allowPastGameSelection()
+    static setupPastGamesUi()
     {
-        GameUI.setUiState_allowAddPlayer();
-        GameUI.setUiState_allowStart();
-        GameUI.setUiState_allowEnd();
-        GameUI.setUiState_allowReset();
-
-        GameUI.renderPastGames(document,
-            document.querySelector("#pastGamesSlot"));
+        let slot = document.querySelector("#pastGamesSlot");
+        GameUI.renderPastGames(document, slot);
 
         let hasSavedGames = !!GameManager.getLatestSavedGame();
-        let el = document.querySelector("#loadGameButton");
-        if (el)
-            el.disabled = !hasSavedGames;
-
-        el = document.querySelector("#deleteGameButton");
-        if (el)
-           el.disabled = !hasSavedGames;
-
-        el = document.querySelector("#deleteAllGamesButton");
-        if (el)
-            el.disabled = !hasSavedGames;
+        slot.querySelector("#loadGameButton").disabled = !hasSavedGames;
+        slot.querySelector("#deleteGameButton").disabled = !hasSavedGames;
+        slot.querySelector("#deleteAllGamesButton").disabled = !hasSavedGames;
     }
 
 
-    static setUiState_allowNewGame()
+    static setupNewGameUi()
     {
         let newGameTmpl = GameUI.cloneFromTemplate(document, "#newGameTmpl");
 
@@ -826,7 +808,7 @@ class GameUI
     }
 
 
-    static setUiState_allowCurrentGame()
+    static setupCurrentGameUi()
     {
         let latestGame = GameManager.getLatestSavedGame();
         if (!latestGame)
@@ -843,7 +825,6 @@ class GameUI
         GameUI.setUiState_allowStart();
         GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
-        GameUI.setUiState_allowNewGame();
     }
 
 
