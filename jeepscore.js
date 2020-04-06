@@ -561,6 +561,11 @@ class GameUI
             document.querySelector("#currentGameSlot"));
 
         GameUI.setUiState_startGame();
+        GameUI.setUiState_allowStart();
+
+        GameUI.allowBodyClick(true);
+
+        GameUI.setupPastGamesUi();
     }
 
 
@@ -683,22 +688,12 @@ class GameUI
     {
         let allowStart = false;
 
-        let currentGame = window.gameManager.getCurrentGame();
-        if (currentGame)
-        {
-            allowStart = false;
-        }
+        if (GameUI.getEnteredPlayers().length > 0)
+            allowStart = true;
         else
-        {
-            if (GameUI.getEnteredPlayers().length > 0)
-                allowStart = true;
-            else
-                allowStart = false;
-        }
+            allowStart = false;
 
-        let el = document.querySelector("#startGameButton");
-        if (el)
-            el.disabled = !allowStart;
+        document.querySelector("#newGameSlot #startGameButton").disabled = !allowStart;
     }
 
 
@@ -740,7 +735,6 @@ class GameUI
 
     static setUiState_noGame()
     {
-        GameUI.setUiState_allowStart();
         GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
         document.querySelector("#playerEntryPanel").hidden = false;
@@ -752,8 +746,6 @@ class GameUI
         GameUI.setUiState_allowStart();
         GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
-
-        GameUI.allowBodyClick(true);
     }
 
 
@@ -798,9 +790,6 @@ class GameUI
         GameUI.renderGame(latestGame,
             document.querySelector("#currentGameSlot"));
 
-        GameUI.setUiState_startGame();
-
-        GameUI.setUiState_allowStart();
         GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
     }
