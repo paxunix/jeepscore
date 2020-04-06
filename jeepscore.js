@@ -580,8 +580,10 @@ class GameUI
 
         GameUI.updateTimes(document.querySelector(".timeTable"), currentGame);
 
-        GameUI.allowCounterActions(false,
-            document.querySelector("#gameContainer"));
+        let gameContainer = document.querySelector("#gameContainer");
+        GameUI.allowCounterActions(false, gameContainer);
+        gameContainer.classList.add("finishedGame");
+
         GameUI.setUiState_allowEnd();
         // Don't reset UI here--let user click reset button so the UI state
         // is preserved as of end of game.
@@ -663,6 +665,10 @@ class GameUI
         GameUI.allowCounterActions(!game.getEndTime(), gameContainer);
         GameUI.updateCounter(gameContainer, game);
         GameUI.updateTimes(gameContainer, game);
+
+        if (game.getEndTime())
+            gameContainer.querySelector("#gameContainer")
+                .classList.add("finishedGame");
 
         GameUI.replaceChildrenWithElement($target, gameContainer);
     }
