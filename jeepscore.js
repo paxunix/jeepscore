@@ -397,28 +397,15 @@ class GameUI
         window.gameManager = new GameManager();
 
         GameUI.setUiState_allowNewGame();
-
-        document.querySelector("#endGame").addEventListener("click", GameUI.end_click);
-        document.querySelector("#resetGame").addEventListener("click", GameUI.reset_click);
-
-        let latestGame = GameManager.getLatestSavedGame();
-        if (!latestGame)
-            GameUI.setUiState_noGame();
-        else
-        {
-            window.gameManager.setGame(latestGame);
-            GameUI.renderGame(latestGame);
-            GameUI.setUiState_startGame();
-        }
-
+        GameUI.setUiState_allowCurrentGame();
         GameUI.setUiState_allowPastGameSelection();
     }
 
 
     static click_addPlayer(evt)
     {
-        let playerEntryDiv = document.querySelector("#playerEntryTmpl")
-            .content.cloneNode(true);
+        let playerEntryDiv = GameUI
+            .cloneFromTemplate(document, "#playerEntryTmpl");
 
         playerEntryDiv.querySelector(".playerDelete")
             .addEventListener("click", GameUI.click_deletePlayer);
@@ -573,7 +560,8 @@ class GameUI
 
         let currentGame = window.gameManager.getCurrentGame();
 
-        GameUI.renderGame(currentGame);
+        GameUI.renderGame(currentGame,
+            document.querySelector("#currentGameSlot"));
 
         GameUI.setUiState_startGame();
         GameUI.setUiState_allowPastGameSelection();
@@ -647,16 +635,25 @@ class GameUI
     }
 
 
-    static renderGame(game)
+    static renderGame(game, $target)
     {
-        let gameContainer = document.querySelector("#gameContainerTmpl")
-            .content.cloneNode(true);
+        let gameContainer = GameUI
+            .cloneFromTemplate(document, "#currentGameTmpl");
+
+        GameUI.makeLegend("Game On!",
+            gameContainer.querySelector("fieldset"));
+
+        gameContainer.querySelector("#endGame")
+            .addEventListener("click", GameUI.end_click);
+        gameContainer.querySelector("#resetGame")
+            .addEventListener("click", GameUI.reset_click);
+
         let playerContainer = gameContainer.querySelector(".playerContainer");
 
         for (let p of game.getPlayers())
         {
-            let playerRow = document.querySelector("#playerInGameRowTmpl")
-                .content.cloneNode(true);
+            let playerRow = GameUI
+                .cloneFromTemplate(document, "#playerInGameRowTmpl");
 
             playerRow.querySelector(".playerName").textContent = p.getName();
             playerRow.querySelector(".playerBid").textContent = p.getBid();
@@ -668,11 +665,9 @@ class GameUI
 
         GameUI.allowCounterActions(!game.getEndTime(), gameContainer);
         GameUI.updateCounter(gameContainer, game);
-
         GameUI.updateTimes(gameContainer, game);
 
-        let curGameContainer = document.querySelector("#gameContainer");
-        GameUI.replaceChildrenWithElement(curGameContainer, gameContainer);
+        GameUI.replaceChildrenWithElement($target, gameContainer);
     }
 
 
@@ -722,7 +717,7 @@ class GameUI
                 allowStart = false;
         }
 
-        document.querySelector("#startGame").disabled = !allowStart;
+        document.querySelector("#startGameButton").disabled = !allowStart;
     }
 
 
@@ -765,7 +760,6 @@ class GameUI
         GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
         document.querySelector("#playerEntryPanel").hidden = false;
-        document.querySelector("#gamePanel").hidden = true;
     }
 
 
@@ -775,8 +769,6 @@ class GameUI
         GameUI.setUiState_allowStart();
         GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
-        document.querySelector("#playerEntryPanel").hidden = true;
-        document.querySelector("#gamePanel").hidden = false;
 
         GameUI.allowBodyClick(true);
     }
@@ -790,7 +782,7 @@ class GameUI
         GameUI.setUiState_allowReset();
 
         GameUI.renderPastGames(document,
-            document.querySelector("#pastGamesContainer"));
+            document.querySelector("#pastGamesSlot"));
 
         let hasSavedGames = !!GameManager.getLatestSavedGame();
         document.querySelector("#loadGameButton").disabled = !hasSavedGames;
@@ -801,32 +793,48 @@ class GameUI
 
     static setUiState_allowNewGame()
     {
-        let newGameTmpl = document
-            .querySelector("#newGameTmpl")
-            .content.cloneNode(true);
+        let newGameTmpl = GameUI.cloneFromTemplate(document, "#newGameTmpl");
 
         GameUI.makeLegend("New Game",
             newGameTmpl.querySelector("fieldset"));
 
         newGameTmpl.querySelector("#addPlayer")
             .addEventListener("click", GameUI.click_addPlayer);
-        newGameTmpl.querySelector("#startGame")
+        newGameTmpl.querySelector("#startGameButton")
             .addEventListener("click", GameUI.start_click);
 
         GameUI.replaceChildrenWithElement(document.querySelector("#newGameSlot"), newGameTmpl);
 
         GameUI.setUiState_allowAddPlayer();
         GameUI.setUiState_allowStart();
+    }
+
+
+    static setUiState_allowCurrentGame()
+    {
+        let latestGame = GameManager.getLatestSavedGame();
+        if (!latestGame)
+            return;
+
+        window.gameManager.setGame(latestGame);
+
+        GameUI.renderGame(latestGame,
+            document.querySelector("#currentGameSlot"));
+
+        GameUI.setUiState_startGame();
+
+        GameUI.setUiState_allowAddPlayer();
+        GameUI.setUiState_allowStart();
         GameUI.setUiState_allowEnd();
         GameUI.setUiState_allowReset();
+        GameUI.setUiState_allowNewGame();
     }
 
 
     static renderPastGames(templateDoc, destEl)
     {
-        let pastGamesTmpl = templateDoc
-            .querySelector("#pastGamesContainerTmpl")
-            .content.cloneNode(true);
+        let pastGamesTmpl = GameUI.
+            cloneFromTemplate(templateDoc, "#pastGamesContainerTmpl");
 
         GameUI.makeLegend("Saved Games",
             pastGamesTmpl.querySelector("fieldset"));
@@ -848,8 +856,8 @@ class GameUI
                 let game = new Game(rawGamesData[k]);
                 let isGameOver = game.getEndTime() !== null;
 
-                let pastGameTmpl = templateDoc.querySelector("#pastGameTmpl")
-                    .content.cloneNode(true);
+                let pastGameTmpl = GameUI.
+                    cloneFromTemplate(templateDoc, "#pastGameTmpl");
                 let $input = pastGameTmpl.querySelector("input");
                 let $label = pastGameTmpl.querySelector("label");
                 let $text = pastGameTmpl.querySelector("span");
@@ -882,6 +890,8 @@ class GameUI
 
     static click_toggleFieldsetContent(evt)
     {
+        // Presumes all fieldsets wanting toggling have a div in them that
+        // contains the toggleable content.
         let $fieldSetContent = evt.target.closest("fieldset").querySelector("div");
         if ($fieldSetContent)
         {
@@ -901,5 +911,11 @@ class GameUI
             $currentLegend.replaceWith($legend);
         else
             $fieldset.prepend($legend);
+    }
+
+
+    static cloneFromTemplate(doc, tmplSelector)
+    {
+        return doc.querySelector(tmplSelector).content.cloneNode(true);
     }
 }

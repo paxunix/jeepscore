@@ -93,7 +93,7 @@
       background-color: cyan;
     }
 
-    #pastGamesPanel {
+    #newGameSlot, #pastGamesSlot {
       margin-top: 2ex;
     }
 
@@ -129,32 +129,40 @@
     </tr>
   </template>
 
-  <template id="gameContainerTmpl">
-    <table class="timeTable">
-      <tr class="startTime">
-        <td>Started:</td> <td class="startTimeValue"></td>
-      </tr>
-      <tr class="endTime">
-        <td>Ended:</td> <td class="endTimeValue"></td>
-      </tr>
-      <tr class="elapsedTime">
-        <td>Elapsed:</td> <td class="elapsedTimeValue"></td>
-      </tr>
-    </table>
-    <hr/>
-    <table class="playerContainer">
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Low</th>
-        <th scope="col">Bid</th>
-        <th scope="col">High</th>
-      </tr>
-    </table>
-    <div class="countContainer">
-      <div class="inccount">&#x25B2;</div>
-      <div class="counter"></div>
-      <div class="deccount">&#x25BC;</div>
-    </div>
+  <template id="currentGameTmpl">
+    <fieldset id="gamePanel">
+      <div id="gameContainer">
+        <table class="timeTable">
+          <tr class="startTime">
+            <td>Started:</td> <td class="startTimeValue"></td>
+          </tr>
+          <tr class="endTime">
+            <td>Ended:</td> <td class="endTimeValue"></td>
+          </tr>
+          <tr class="elapsedTime">
+            <td>Elapsed:</td> <td class="elapsedTimeValue"></td>
+          </tr>
+        </table>
+        <hr/>
+        <table class="playerContainer">
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Low</th>
+            <th scope="col">Bid</th>
+            <th scope="col">High</th>
+          </tr>
+        </table>
+        <div class="countContainer">
+          <div class="inccount">&#x25B2;</div>
+          <div class="counter"></div>
+          <div class="deccount">&#x25BC;</div>
+        </div>
+        <div class="buttonRow">
+          <button id="endGame">End</button>
+          <button id="resetGame">Reset</button>
+        </div>
+      </div>
+    </fieldset>
   </template>
 
   <template id="pastGamesContainerTmpl">
@@ -180,33 +188,20 @@
 
   <template id="newGameTmpl">
     <fieldset id="playerEntryPanel">
-      <legend>New Game</legend>
         <div>
           <div id="playerEntryContainer"></div>
           <div class="buttonRow">
             <button id="addPlayer">Add Player</button>
-            <button id="startGame">Start</button>
+            <button id="startGameButton">Start</button>
           </div>
         </div>
     </fieldset>
   </template>
 
   <div class="game">
+    <div id="currentGameSlot"></div>
     <div id="newGameSlot"></div>
-    <fieldset id="gamePanel">
-      <legend>Game On!</legend>
-      <div>
-        <div id="gameContainer">
-        </div>
-        <div class="buttonRow">
-          <button id="endGame">End</button>
-          <button id="resetGame">Reset</button>
-        </div>
-      </div>
-    </fieldset>
-
-    <div id="pastGamesContainer">
-    </div>
+    <div id="pastGamesSlot"></div>
   </div>
 
 <script>
