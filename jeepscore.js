@@ -53,7 +53,7 @@ class GameManager
 
     static getLatestSavedGame()
     {
-        let savedData = GameManager.loadCurrentGames();
+        let savedData = GameManager.getRawSavedGamesData();
         let gameDates = Object.keys(savedData);
         let newestDate = gameDates.sort().slice(-1)[0];
 
@@ -66,7 +66,7 @@ class GameManager
     }
 
 
-    static loadCurrentGames()
+    static getRawSavedGamesData()
     {
         let jsonStr = localStorage.getItem(STORAGE_KEY_CURRENT) ?? "{}";
         let gameData = JSON.parse(jsonStr);
@@ -77,7 +77,7 @@ class GameManager
 
     static deleteSavedGame(gameId)
     {
-        let data = GameManager.loadCurrentGames();
+        let data = GameManager.getRawSavedGamesData();
 
         delete data[gameId];
 
@@ -93,7 +93,7 @@ class GameManager
 
     static saveGame(game)
     {
-        let data = GameManager.loadCurrentGames();
+        let data = GameManager.getRawSavedGamesData();
         data[game.getId()] = game.getRawData();
 
         // Keep the latest 10 current games
@@ -107,7 +107,7 @@ class GameManager
 
     static getSavedGameRawData(gameId)
     {
-        let data = GameManager.loadCurrentGames();
+        let data = GameManager.getRawSavedGamesData();
         return data[gameId];
     }
 }
@@ -805,7 +805,7 @@ class GameUI
 
         let $list = pastGamesTmpl.querySelector(".pastGamesList");
 
-        let rawGamesData = GameManager.loadCurrentGames();
+        let rawGamesData = GameManager.getRawSavedGamesData();
 
         if (Object.keys(rawGamesData).length === 0)
         {
