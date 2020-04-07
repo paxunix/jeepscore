@@ -179,6 +179,7 @@ class Game
             endTime: endTime,
             count: fromObj.count ?? 0,
             scoreAlgorithm: fromObj.scoreAlgorithm ?? SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL,
+            //scoreAlgorithm: fromObj.scoreAlgorithm ?? SCORE_ALGORITHM_PRICE_IS_RIGHT,
         };
 
         return this;
@@ -320,6 +321,46 @@ class Game
 
     getScore_priceIsRight()
     {
+        let scoreData = {};
+
+        for (let p of this.getPlayers())
+        {
+            let isLow = p.getBid() < this.getCount();
+            let isHigh = p.getBid() > this.getCount();
+
+            scoreData[p.getId()] = {
+                name: p.getName(),
+                bid: p.getBid(),
+                isLow: isLow,
+                isHigh: isHigh,
+                diff: this.getCount() - p.getBid(),
+            };
+        }
+
+        let smallestDiff = Math.min(...Object.values(scoreData)
+            .filter(i => i.diff >= 0)
+            .map(i => i.diff)
+        );
+
+        // Mark the current winners (who are closest to the count without
+        // going over)
+        for (let p of this.getPlayers())
+        {
+            let pid = p.getId();
+            let diff = scoreData[pid].diff;
+            scoreData[pid].isWin = diff >=0 && diff <= smallestDiff;
+            scoreData[pid].rowClassList = [
+                scoreData[pid].isWin ? "win" : "lose"
+            ];
+        }
+
+        return {
+            columns: [
+                { name: "Name", prop: "name", classList: [ "name" ] },
+                { name: "Bid", prop: "bid", classList: [ "score", "bid" ] },
+            ],
+            data: scoreData,
+        }
     }
 
 
