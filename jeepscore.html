@@ -51,21 +51,37 @@
       font-weight: bold;
     }
 
-    .playerInGame .playerName {
+    table.scoreBoard {
+      width: 100%;
+    }
+
+    table.scoreBoard .name {
       width: 60%;
     }
 
-    .playerInGame td {
+    table.scoreBoard td {
       vertical-align: middle;
     }
 
-    .playerInGame .score {
+    table.scoreBoard .score {
       text-align: center;
     }
 
-    .playerInGame .playerBid {
+    table.scoreBoard .bid {
       font-size: 115%;
       font-weight: bold;
+    }
+
+    table.scoreBoard .yellow {
+      background-color: yellow;
+    }
+
+    table.scoreBoard .win {
+      background-color: limegreen;
+    }
+
+    table.scoreBoard .lose {
+      background-color: salmon;
     }
 
     .timeTable {
@@ -154,13 +170,7 @@
           </tr>
         </table>
         <hr/>
-        <table class="playerContainer">
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Low</th>
-            <th scope="col">Bid</th>
-            <th scope="col">High</th>
-          </tr>
+        <table class="scoreBoard">
         </table>
         <div class="countContainer">
           <div class="inccount">&#x25B2;</div>

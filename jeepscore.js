@@ -292,17 +292,27 @@ class Game
             let playerMax = p.getBid() + splitSpread;
             let isLow = this.getCount() < playerMin;
             let isHigh = this.getCount() > playerMax;
+            let isWin = !isLow && !isHigh;
 
             scoreData[p.getId()] = {
+                name: p.getName(),
                 min: playerMin,
                 max: playerMax,
+                bid: p.getBid(),
                 isLow: isLow,
                 isHigh: isHigh,
-                isWin: !isLow && !isHigh,
+                isWin: isWin,
+                rowClassList: [ isWin ? "win" : isLow ? "yellow" : "lose" ]
             };
         }
 
         return {
+            columns: [
+                { name: "Name", prop: "name", classList: [ "name" ] },
+                { name: "Low", prop: "min", classList: [ "score" ] },
+                { name: "Bid", prop: "bid", classList: [ "score", "bid"] },
+                { name: "High", prop: "max", classList: [ "score" ] },
+            ],
             data: scoreData,
         }
     }
@@ -473,31 +483,51 @@ class GameUI
     static updateCounter(gameContainer, game)
     {
         let counter = gameContainer.querySelector(".counter");
-        counter.textContent = game.getCount();
-
-        let scoreData = game.getScoreData();
-        GameUI.updateScore(gameContainer, game, scoreData);
+        counter.innerText = game.getCount();
     }
 
 
-    static updateScore(gameContainer, game, scoreData)
+    static renderScoreBoard(gameContainer, scoreData)
     {
-        for (let p of game.getPlayers())
+        let $table = gameContainer.querySelector("table.scoreBoard");
+        GameUI.replaceChildrenWithElement($table, null);
+
+        GameUI.buildScoreBoardHeader($table.insertRow(),
+            scoreData.columns);
+
+        for (let v of Object.values(scoreData.data))
         {
-            let playerEl = gameContainer
-                .querySelector(`.playerInGame[data\-playerid="${p.getId()}"]`);
+            GameUI.buildScoreBoardPlayerRow($table.insertRow(),
+                scoreData.columns, v);
+        }
+    }
 
-            if (scoreData.data[p.getId()].isLow)
-                playerEl.style = "background-color: yellow;";
 
-            if (scoreData.data[p.getId()].isWin)
-                playerEl.style = "background-color: limegreen;";
+    static buildScoreBoardHeader($tr, columns)
+    {
+        for (let c of columns)
+        {
+            let $th = document.createElement("th");
+            $th.setAttribute("scope", "col");
+            $th.innerText = c.name;
 
-            if (scoreData.data[p.getId()].isHigh)
-                playerEl.style = "background-color: salmon;";
+            $tr.appendChild($th);
+        }
+    }
 
-            playerEl.querySelector(".playerLow").textContent = scoreData.data[p.getId()].min;
-            playerEl.querySelector(".playerHigh").textContent = scoreData.data[p.getId()].max;
+
+    static buildScoreBoardPlayerRow($tr, columns, data)
+    {
+        $tr.classList.add(...data.rowClassList);
+
+        for (let c of columns)
+        {
+            let $td = document.createElement("td");
+            $td.setAttribute("scope", "col");
+            $td.innerText = data[c.prop];
+            $td.classList.add(...c.classList);
+
+            $tr.appendChild($td);
         }
     }
 
@@ -534,6 +564,7 @@ class GameUI
         let game = window.gameManager.getCurrentGame();
         game.incCount();
         GameUI.updateCounter(document, game);
+        GameUI.renderScoreBoard(gameContainer, game.getScoreData());
 
         GameManager.saveGame(game);
     }
@@ -544,6 +575,7 @@ class GameUI
         let game = window.gameManager.getCurrentGame();
         game.decCount();
         GameUI.updateCounter(document, game);
+        GameUI.renderScoreBoard(gameContainer, game.getScoreData());
 
         GameManager.saveGame(game);
     }
@@ -681,23 +713,9 @@ class GameUI
         gameContainer.querySelector("#endGame")
             .addEventListener("click", GameUI.end_click);
 
-        let playerContainer = gameContainer.querySelector(".playerContainer");
-
-        for (let p of game.getPlayers())
-        {
-            let playerRow = GameUI
-                .cloneFromTemplate(document, "#playerInGameRowTmpl");
-
-            playerRow.querySelector(".playerName").textContent = p.getName();
-            playerRow.querySelector(".playerBid").textContent = p.getBid();
-            playerRow.querySelector(".playerInGame").dataset.playerid =
-                p.getId();
-
-            playerContainer.tBodies[0].appendChild(playerRow);
-        }
-
         GameUI.allowCounterActions(!game.getEndTime(), gameContainer);
         GameUI.updateCounter(gameContainer, game);
+        GameUI.renderScoreBoard(gameContainer, game.getScoreData());
         GameUI.updateTimes(gameContainer, game);
 
         if (game.getEndTime())
