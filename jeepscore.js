@@ -841,7 +841,7 @@ class GameUI
     static formatDateTime(dateObj)
     {
         return new Intl.DateTimeFormat(undefined, {
-                dateStyle: "long",
+                dateStyle: "medium",
                 timeStyle: "long",
             }).format(dateObj);
     }
