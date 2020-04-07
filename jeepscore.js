@@ -103,6 +103,13 @@ class GameManager
 
         GameManager.saveCurrentGameData(data);
     }
+
+
+    static getSavedGameRawData(gameId)
+    {
+        let data = GameManager.loadCurrentGames();
+        return data[gameId];
+    }
 }
 
 
@@ -591,6 +598,25 @@ class GameUI
     }
 
 
+    static click_load(evt)
+    {
+        let $checked = document.querySelectorAll(".pastGamesList input:checked");
+
+        if ($checked.length === 0)
+            return;
+
+        if ($checked.length > 1)
+            return;
+
+        let gameId = $checked[0].value;
+        let rawGameData = GameManager.getSavedGameRawData(gameId);
+
+        window.gameManager.startGame(new Game(rawGameData));
+
+        $checked[0].checked = false;
+    }
+
+
     static allowCounterActions(enable, gameContainer)
     {
         gameContainer.querySelector(".counter")[
@@ -705,6 +731,9 @@ class GameUI
         slot.querySelector("#loadGameButton").disabled = !hasSavedGames;
         slot.querySelector("#deleteGameButton").disabled = !hasSavedGames;
         slot.querySelector("#deleteAllGamesButton").disabled = !hasSavedGames;
+
+        slot.querySelector("#loadGameButton")
+            .addEventListener("click", GameUI.click_load);
     }
 
 
