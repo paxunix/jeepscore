@@ -780,7 +780,9 @@ class GameUI
                 let $label = pastGameTmpl.querySelector("label");
                 let $text = pastGameTmpl.querySelector("span");
 
-                $text.innerHTML = `${GameUI.formatDateTime(game.getStartTime())}${isGameOver ? "&nbsp;&#x1F3C1" : ""}`;
+                let finishFlag = '&#x1F3C1;';
+                $text.innerHTML = `${GameUI.formatDateTime(game.getStartTime())} ${isGameOver ? `${finishFlag}` : ""} ${game.getNumPlayers()}P ${game.getCount()}#`;
+
                 $input.value = game.getId();
 
                 if (currentGame && currentGame.getId() === game.getId())
