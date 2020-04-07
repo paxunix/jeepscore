@@ -800,8 +800,6 @@ class GameUI
 
     static setupCurrentGameUi()
     {
-        let slot = document.querySelector("#currentGameSlot");
-
         let latestGame = GameManager.getLatestSavedGame();
         if (!latestGame)
         {
@@ -810,10 +808,7 @@ class GameUI
             return;
         }
 
-        window.gameManager.setGame(latestGame);
-
-        GameUI.renderGame(latestGame,
-            document.querySelector("#currentGameSlot"));
+        window.gameManager.startGame(latestGame);
     }
 
 
