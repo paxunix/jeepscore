@@ -636,6 +636,22 @@ class GameUI
     }
 
 
+    static click_deleteAll(evt)
+    {
+        if (window.confirm("Are you sure you want to delete all?") !== true)
+            return;
+
+        let rawGamesData = GameManager.getRawSavedGamesData();
+        for (let gameId of Object.keys(rawGamesData))
+        {
+            GameManager.deleteSavedGame(gameId);
+        }
+
+        GameUI.setupCurrentGameUi();
+        GameUI.setupPastGamesUi();
+    }
+
+
     static allowCounterActions(enable, gameContainer)
     {
         gameContainer.querySelector(".counter")[
@@ -756,6 +772,9 @@ class GameUI
 
         slot.querySelector("#deleteGameButton")
             .addEventListener("click", GameUI.click_delete);
+
+        slot.querySelector("#deleteAllGamesButton")
+            .addEventListener("click", GameUI.click_deleteAll);
     }
 
 
