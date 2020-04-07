@@ -828,11 +828,7 @@ class GameUI
         GameUI.makeLegend(`Saved Games (${numGames})`,
             pastGamesTmpl.querySelector("fieldset"));
 
-        if (numGames === 0)
-        {
-            $list.innerText = "No games saved";
-        }
-        else
+        if (numGames !== 0)
         {
             let currentGame = window.gameManager.getCurrentGame();
 
