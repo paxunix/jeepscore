@@ -821,7 +821,8 @@ class GameUI
         let latestGame = GameManager.getLatestSavedGame();
         if (!latestGame)
         {
-            GameUI.replaceChildrenWithElement(slot, null);
+            GameUI.replaceChildrenWithElement(
+                document.querySelector("#currentGameSlot", null));
             window.gameManager.setGame(null);
             return;
         }
