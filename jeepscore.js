@@ -302,7 +302,9 @@ class Game
             };
         }
 
-        return scoreData;
+        return {
+            data: scoreData,
+        }
     }
 
 
@@ -485,17 +487,17 @@ class GameUI
             let playerEl = gameContainer
                 .querySelector(`.playerInGame[data\-playerid="${p.getId()}"]`);
 
-            if (scoreData[p.getId()].isLow)
+            if (scoreData.data[p.getId()].isLow)
                 playerEl.style = "background-color: yellow;";
 
-            if (scoreData[p.getId()].isWin)
+            if (scoreData.data[p.getId()].isWin)
                 playerEl.style = "background-color: limegreen;";
 
-            if (scoreData[p.getId()].isHigh)
+            if (scoreData.data[p.getId()].isHigh)
                 playerEl.style = "background-color: salmon;";
 
-            playerEl.querySelector(".playerLow").textContent = scoreData[p.getId()].min;
-            playerEl.querySelector(".playerHigh").textContent = scoreData[p.getId()].max;
+            playerEl.querySelector(".playerLow").textContent = scoreData.data[p.getId()].min;
+            playerEl.querySelector(".playerHigh").textContent = scoreData.data[p.getId()].max;
         }
     }
 
