@@ -535,14 +535,14 @@ class GameUI
     static updateTimes(container, game)
     {
         let startTime = game.getStartTime();
-        container.querySelector(".startTimeValue").textContent =
+        container.querySelector(".startTimeValue").innerText =
             GameUI.formatDateTime(startTime);
 
         let endTimeRow = container.querySelector(".endTime");
         let endTime = game.getEndTime();
         if (endTime)
         {
-            container.querySelector(".endTimeValue").textContent =
+            container.querySelector(".endTimeValue").innerText =
                 GameUI.formatDateTime(endTime);
 
             endTimeRow.hidden = false;
@@ -555,7 +555,7 @@ class GameUI
             Math.ceil((endTime.getTime() - startTime.getTime()) / 1000));
 
         container.querySelector(".elapsedTimeValue")
-            .textContent = elapsedPrettyTime;
+            .innerText = elapsedPrettyTime;
     }
 
 
@@ -901,7 +901,7 @@ class GameUI
     static makeLegend(text, $fieldset)
     {
         let $legend = document.createElement("legend");
-        $legend.textContent = text;
+        $legend.innerText = text;
         $legend.addEventListener("click", GameUI.click_toggleFieldsetContent);
 
         let $currentLegend = $fieldset.querySelector("legend");
