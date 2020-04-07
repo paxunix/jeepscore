@@ -804,6 +804,7 @@ class GameUI
         if (!latestGame)
         {
             GameUI.replaceChildrenWithElement(slot, null);
+            window.gameManager.setGame(null);
             return;
         }
 
