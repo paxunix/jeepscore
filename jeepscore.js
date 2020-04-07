@@ -27,19 +27,25 @@ class GameManager
     }
 
 
-    startGame(players)
+    startGame(game)
     {
-        this.setGame(new Game({players}));
-        this.game.startGame();
-
+        this.setGame(game);
         GameManager.saveGame(this.game);
+
+        GameUI.renderGame(this.game,
+            document.querySelector("#currentGameSlot"));
+
+        GameUI.setUiState_allowStart();
+        GameUI.setUiState_allowEnd();
+        GameUI.allowBodyClick(true);
+        GameUI.setupPastGamesUi();
     }
 
 
     endGame()
     {
         let game = this.getCurrentGame();
-        game.endGame();
+        game.end();
 
         GameManager.saveGame(game);
     }
@@ -172,7 +178,7 @@ class Game
     }
 
 
-    startGame()
+    start()
     {
         if (this.getStartTime() !== null)
             throw new Error("Can't start a game that is already running");
@@ -184,7 +190,7 @@ class Game
     }
 
 
-    endGame()
+    end()
     {
         if (this.getStartTime() === null)
             throw new Error("Can't end a game that hasn't started");
@@ -545,19 +551,9 @@ class GameUI
 
         GameUI.replaceChildrenWithElement(document.querySelector("#playerEntryContainer"), null);
 
-        window.gameManager.startGame(players);
-
-        let currentGame = window.gameManager.getCurrentGame();
-
-        GameUI.renderGame(currentGame,
-            document.querySelector("#currentGameSlot"));
-
-        GameUI.setUiState_startGame();
-        GameUI.setUiState_allowStart();
-
-        GameUI.allowBodyClick(true);
-
-        GameUI.setupPastGamesUi();
+        let newGame = new Game({players});
+        newGame.start();
+        window.gameManager.startGame(newGame);
     }
 
 
@@ -577,6 +573,7 @@ class GameUI
         gameContainer.classList.add("finishedGame");
 
         GameUI.setUiState_allowEnd();
+        GameUI.setupPastGamesUi();
     }
 
 
@@ -645,6 +642,8 @@ class GameUI
                 .classList.add("finishedGame");
 
         GameUI.replaceChildrenWithElement($target, gameContainer);
+
+        GameUI.setUiState_allowEnd();
     }
 
 
@@ -697,13 +696,6 @@ class GameUI
     }
 
 
-    static setUiState_startGame()
-    {
-        GameUI.setUiState_allowStart();
-        GameUI.setUiState_allowEnd();
-    }
-
-
     static setupPastGamesUi()
     {
         let slot = document.querySelector("#pastGamesSlot");
@@ -744,8 +736,6 @@ class GameUI
 
         GameUI.renderGame(latestGame,
             document.querySelector("#currentGameSlot"));
-
-        GameUI.setUiState_allowEnd();
     }
 
 
