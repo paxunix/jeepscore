@@ -819,14 +819,15 @@ class GameUI
         let pastGamesTmpl = GameUI.
             cloneFromTemplate(templateDoc, "#pastGamesContainerTmpl");
 
-        GameUI.makeLegend("Saved Games",
-            pastGamesTmpl.querySelector("fieldset"));
-
         let $list = pastGamesTmpl.querySelector(".pastGamesList");
 
         let rawGamesData = GameManager.getRawSavedGamesData();
+        let numGames = Object.keys(rawGamesData).length;
 
-        if (Object.keys(rawGamesData).length === 0)
+        GameUI.makeLegend(`Saved Games (${numGames})`,
+            pastGamesTmpl.querySelector("fieldset"));
+
+        if (numGames === 0)
         {
             $list.innerText = "No games saved";
         }
