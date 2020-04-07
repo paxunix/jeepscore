@@ -536,7 +536,7 @@ class GameUI
         GameUI.buildScoreBoardHeader($table.insertRow(),
             scoreData.columns);
 
-        for (let v of Object.values(scoreData.data))
+        for (let v of Object.values(scoreData.data).sort((a,b) => a.name.localeCompare(b)))
         {
             GameUI.buildScoreBoardPlayerRow($table.insertRow(),
                 scoreData.columns, v);
