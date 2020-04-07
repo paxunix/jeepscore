@@ -418,9 +418,6 @@ class GameUI
         playerEntryDiv.querySelector(".bidButton")
             .addEventListener("click", GameUI.click_bid);
 
-        playerEntryDiv.querySelector(".playerEntryError")
-            .style = "visibility: hidden;";
-
         document.querySelector("#playerEntryContainer")
             .appendChild(playerEntryDiv);
 
@@ -453,11 +450,9 @@ class GameUI
             bidEl.value.trim() === "" ||
             parseInt(bidEl.value, 10) < 0)
         {
-            entryEl.querySelector(".playerEntryError").style = "visibility: visible;";
+            GameUI.flashError();
             return false;
         }
-
-        entryEl.querySelector(".playerEntryError").style = "visibility: hidden;";
 
         // Disable player changes now that name and bid have been entered
         nameEl.disabled = true;
@@ -602,11 +597,11 @@ class GameUI
     {
         let $checked = document.querySelectorAll(".pastGamesList input:checked");
 
-        if ($checked.length === 0)
+        if ($checked.length !== 1)
+        {
+            GameUI.flashError();
             return;
-
-        if ($checked.length > 1)
-            return;
+        }
 
         let gameId = $checked[0].value;
         let rawGameData = GameManager.getSavedGameRawData(gameId);
@@ -865,5 +860,15 @@ class GameUI
                 dateStyle: "medium",
                 timeStyle: "long",
             }).format(dateObj);
+    }
+
+
+    static flashError()
+    {
+        let $ohnoDiv = GameUI.cloneFromTemplate(document, "#ohNoTmpl");
+
+        document.body.appendChild($ohnoDiv);
+
+        window.setTimeout(() => document.querySelector("#ohno").remove(), 500);
     }
 }

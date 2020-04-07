@@ -15,12 +15,6 @@
       font-weight: bold;
     }
 
-    .playerEntryError {
-      color: red;
-      cursor: help;
-      font-weight: bold;
-    }
-
     .playerBid {
       width: 7ex;
     }
@@ -107,6 +101,19 @@
     .buttonRow {
       margin-top: 1ex;
     }
+
+    #ohno {
+      background-color: white;
+      color: red;
+      font-size: 100vw;
+      height: 100%;
+      left: 0;
+      opacity: 80%;
+      position: fixed;
+      text-align: center;
+      top: 0;
+      width: 100%;
+    }
   </style>
 
   <script src="jeepscore.js"></script>
@@ -118,7 +125,6 @@
       <span class="playerDelete">&#x24cd;</span>
       <input class="playerName" type="text" size="15" placeholder="Player name" minlength="1" maxlength="15" required></input>
       <input class="playerBid" type="number" size="4" placeholder="Bid" minlength="1" maxlength="4" inputmode="numeric" required></input>
-      <span class="playerEntryError" title="Name and bid require values">&#x2757;</span>
       <button class="bidButton">Bid!</button>
     </div>
   </template>
@@ -198,6 +204,10 @@
           </div>
         </div>
     </fieldset>
+  </template>
+
+  <template id="ohNoTmpl">
+    <div id="ohno">&#x1F6AB;</div>
   </template>
 
   <div class="game">
