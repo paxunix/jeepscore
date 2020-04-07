@@ -75,11 +75,11 @@ class GameManager
     }
 
 
-    static deleteSavedGame(time)
+    static deleteSavedGame(gameId)
     {
         let data = GameManager.loadCurrentGames();
 
-        delete data[time];
+        delete data[gameId];
 
         GameManager.saveCurrentGameData(data);
     }
@@ -608,7 +608,31 @@ class GameUI
 
         window.gameManager.startGame(new Game(rawGameData));
 
-        $checked[0].checked = false;
+        GameUI.setupPastGamesUi();
+    }
+
+
+    static click_delete(evt)
+    {
+        let $checked = document.querySelectorAll(".pastGamesList input:checked");
+
+        if ($checked.length === 0)
+        {
+            GameUI.flashError();
+            return;
+        }
+
+        if (window.confirm("Are you sure you want to delete?") !== true)
+            return;
+
+        for (let $el of $checked)
+        {
+            let gameId = $el.value;
+            GameManager.deleteSavedGame(gameId);
+        }
+
+        GameUI.setupCurrentGameUi();
+        GameUI.setupPastGamesUi();
     }
 
 
@@ -729,6 +753,9 @@ class GameUI
 
         slot.querySelector("#loadGameButton")
             .addEventListener("click", GameUI.click_load);
+
+        slot.querySelector("#deleteGameButton")
+            .addEventListener("click", GameUI.click_delete);
     }
 
 
@@ -752,9 +779,14 @@ class GameUI
 
     static setupCurrentGameUi()
     {
+        let slot = document.querySelector("#currentGameSlot");
+
         let latestGame = GameManager.getLatestSavedGame();
         if (!latestGame)
+        {
+            GameUI.replaceChildrenWithElement(slot, null);
             return;
+        }
 
         window.gameManager.setGame(latestGame);
 
