@@ -118,6 +118,16 @@
       margin-top: 1ex;
     }
 
+    .gameControl {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .scoreMethod {
+      font-size: 80%;
+    }
+
     #ohno {
       background-color: white;
       color: red;
@@ -177,8 +187,12 @@
           <div class="counter"></div>
           <div class="deccount">&#x25BC;</div>
         </div>
-        <div class="buttonRow">
+        <div class="buttonRow gameControl">
           <button id="endGame">End</button>
+          <label class="scoreMethod">Scoring:&nbsp;
+            <select class="scoreAlgo">
+            </select>
+          </label>
         </div>
       </div>
     </fieldset>

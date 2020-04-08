@@ -148,8 +148,10 @@ class Player
 }
 
 
-const SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL = 0;
-const SCORE_ALGORITHM_PRICE_IS_RIGHT = 1;
+const SCORE_ALGORITHMS = {
+    SPREAD_SPLIT: "Spread Split",
+    PRICE_IS_RIGHT: "Price Is Right",
+};
 
 class Game
 {
@@ -178,8 +180,7 @@ class Game
             startTime: startTime,
             endTime: endTime,
             count: fromObj.count ?? 0,
-            scoreAlgorithm: fromObj.scoreAlgorithm ?? SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL,
-            //scoreAlgorithm: fromObj.scoreAlgorithm ?? SCORE_ALGORITHM_PRICE_IS_RIGHT,
+            scoreAlgorithm: fromObj.scoreAlgorithm ?? "SPREAD_SPLIT"
         };
 
         return this;
@@ -264,22 +265,34 @@ class Game
     }
 
 
+    setScoreAlgorithm(algo)
+    {
+        this.data.scoreAlgorithm = algo;
+    }
+
+
+    getScoreAlgorithm()
+    {
+        return this.data.scoreAlgorithm;
+    }
+
+
     getScoreData()
     {
         switch (this.data.scoreAlgorithm)
         {
-            case SCORE_ALGORITHM_MIN_MAX_SPLIT_SPREAD_ALL:
-                return this.getScore_minMaxSplitSpreadAll();
+            case "SPREAD_SPLIT":
+                return this.getScore_spreadSplit();
 
-            case SCORE_ALGORITHM_PRICE_IS_RIGHT:
+            case "PRICE_IS_RIGHT":
                 return this.getScore_priceIsRight();
         }
 
-        throw new Error("Unknown scoring algorithm");
+        return this.getScore_spreadSplit();
     }
 
 
-    getScore_minMaxSplitSpreadAll()
+    getScore_spreadSplit()
     {
         let scoreData = {};
         let bids = this.getPlayers().map(p => p.getBid());
@@ -600,6 +613,22 @@ class GameUI
     }
 
 
+    static setupScoringSelector(container, scoreAlgorithms, game)
+    {
+        let $sel = container.querySelector("select.scoreAlgo");
+        GameUI.replaceChildrenWithElement($sel, null);
+
+        for (let ar of Object.entries(scoreAlgorithms))
+        {
+            let $opt = document.createElement("option");
+            $opt.value = ar[0];
+            $opt.innerText = ar[1];
+            $opt.selected = game.getScoreAlgorithm() === ar[0];
+            $sel.appendChild($opt)
+        }
+    }
+
+
     static counter_click(evt)
     {
         let game = window.gameManager.getCurrentGame();
@@ -651,6 +680,17 @@ class GameUI
 
         GameUI.setUiState_allowEnd();
         GameUI.setupPastGamesUi();
+    }
+
+
+    static change_score(evt)
+    {
+        let currentGame = window.gameManager.getCurrentGame();
+        currentGame.setScoreAlgorithm(evt.target.selectedOptions[0].value);
+        GameManager.saveGame(currentGame);
+
+        GameUI.renderGame(currentGame,
+            document.querySelector("#currentGameSlot"));
     }
 
 
@@ -754,10 +794,14 @@ class GameUI
         gameContainer.querySelector("#endGame")
             .addEventListener("click", GameUI.end_click);
 
+        gameContainer.querySelector(".scoreAlgo")
+            .addEventListener("change", GameUI.change_score);
+
         GameUI.allowCounterActions(!game.getEndTime(), gameContainer);
         GameUI.updateCounter(gameContainer, game);
         GameUI.renderScoreBoard(gameContainer, game.getScoreData());
         GameUI.updateTimes(gameContainer, game);
+        GameUI.setupScoringSelector(gameContainer, SCORE_ALGORITHMS, game);
 
         if (game.getEndTime())
             gameContainer.querySelector("#gameContainer")
