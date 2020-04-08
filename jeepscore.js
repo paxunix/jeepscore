@@ -530,6 +530,9 @@ class GameUI
         bidEl.type = "password";
         bidEl.value = bidEl.value.padEnd(7, " ");
 
+        evt.target.closest("#playerEntryPanel")
+            .querySelector("#addPlayer").focus();
+
         GameUI.setUiState_allowStart();
     }
 
