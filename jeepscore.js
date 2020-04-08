@@ -484,13 +484,15 @@ class GameUI
         playerEntryDiv.querySelector(".bidButton")
             .addEventListener("click", GameUI.click_bid);
 
-        document.querySelector("#playerEntryContainer")
-            .appendChild(playerEntryDiv);
+        let playerEntryContainer =
+            document.querySelector("#playerEntryContainer");
+
+        playerEntryContainer.appendChild(playerEntryDiv);
 
         // Defer setting focus to latest player name input until UI has
         // updated or it won't be set.
         window.setTimeout(() => {
-            Array.from(document.querySelectorAll(".playerName"))
+            Array.from(playerEntryContainer.querySelectorAll(".playerName"))
                 .slice(-1)[0].focus();
         }, 0);
     }
