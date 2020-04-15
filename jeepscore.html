@@ -130,16 +130,17 @@
 
     #ohno {
       background-color: white;
-      color: red;
-      font-size: 100vw;
-      font-weight: bold;
       height: 100%;
       left: 0;
       opacity: 80%;
       position: fixed;
-      text-align: center;
       top: 0;
       width: 100%;
+    }
+
+    #ohno img {
+      max-height: 100vh;
+      max-width: 100vw;
     }
   </style>
 
@@ -232,7 +233,9 @@
   </template>
 
   <template id="ohNoTmpl">
-    <div id="ohno">&#x1F6AB;</div>
+    <div id="ohno">
+      <img src="ohno.svg">
+    </div>
   </template>
 
   <div class="game">
