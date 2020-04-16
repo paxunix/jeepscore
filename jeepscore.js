@@ -32,6 +32,9 @@ class GameManager
         this.setGame(game);
         GameManager.saveGame(this.game);
 
+        let prettyGameTime = GameUI.formatDateTime(this.game.getStartTime());
+        document.title = `Jeep Score : ${prettyGameTime}`;
+
         GameUI.renderGame(this.game,
             document.querySelector("#currentGameSlot"));
 
@@ -39,6 +42,7 @@ class GameManager
         GameUI.setUiState_allowEnd();
         GameUI.allowBodyClick(true);
         GameUI.setupPastGamesUi();
+        GameUI.saveGameToUrl(this.getCurrentGame());
     }
 
 
@@ -53,13 +57,19 @@ class GameManager
 
     static getLatestSavedGame()
     {
+        let gameId = GameUI.getGameIdFromUrl(window.location.href);
         let savedData = GameManager.getRawSavedGamesData();
-        let gameDates = Object.keys(savedData);
-        let newestDate = gameDates.sort().slice(-1)[0];
 
-        if (newestDate)
+        if (!gameId)
         {
-            return new Game(savedData[newestDate]);
+            let gameDates = Object.keys(savedData);
+            gameId = gameDates.sort().slice(-1)[0];
+        }
+
+        if (gameId)
+        {
+            if (savedData[gameId])
+                return new Game(savedData[gameId]);
         }
 
         return null;
@@ -467,6 +477,16 @@ class GameUI
     {
         window.gameManager = new GameManager();
 
+        window.addEventListener("popstate", evt => {
+                let gameId = GameUI.getGameIdFromUrl(window.location.href);
+                if (gameId)
+                {
+                    let rawGameData = GameManager.getSavedGameRawData(gameId);
+                    if (rawGameData)
+                        window.gameManager.startGame(new Game(rawGameData));
+                }
+            });
+
         GameUI.setupNewGameUi();
         GameUI.setupCurrentGameUi();
         GameUI.setupPastGamesUi();
@@ -727,8 +747,6 @@ class GameUI
         let rawGameData = GameManager.getSavedGameRawData(gameId);
 
         window.gameManager.startGame(new Game(rawGameData));
-
-        GameUI.setupPastGamesUi();
     }
 
 
@@ -918,6 +936,30 @@ class GameUI
         }
 
         window.gameManager.startGame(latestGame);
+    }
+
+
+    static getGameIdFromUrl(url)
+    {
+        url = new URL(url);
+        if (url.hash.length > 1)
+        {
+            return url.hash.substr(1);
+        }
+
+        return null;
+    }
+
+
+    static saveGameToUrl(game)
+    {
+        if (window.location.hash.substr(1) !== game.getId())
+        {
+            let prettyGameTime = GameUI.formatDateTime(game.getStartTime());
+            history.pushState(game.getId(),
+                prettyGameTime,
+                "#" + game.getId());
+        }
     }
 
 
