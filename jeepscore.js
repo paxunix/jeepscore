@@ -55,6 +55,13 @@ class GameManager
     }
 
 
+    static getPastGamesCount()
+    {
+        let savedData = GameManager.getRawSavedGamesData();
+        return Object.keys(savedData).length;
+    }
+
+
     static getLatestSavedGame()
     {
         let gameId = GameUI.getGameIdFromUrl(window.location.href);
@@ -890,7 +897,7 @@ class GameUI
         let slot = document.querySelector("#pastGamesSlot");
         GameUI.renderPastGames(document, slot);
 
-        let hasSavedGames = !!GameManager.getLatestSavedGame();
+        let hasSavedGames = GameManager.getPastGamesCount() > 0;
         slot.querySelector("#loadGameButton").disabled = !hasSavedGames;
         slot.querySelector("#deleteGameButton").disabled = !hasSavedGames;
         slot.querySelector("#deleteAllGamesButton").disabled = !hasSavedGames;
@@ -970,14 +977,14 @@ class GameUI
 
         let $list = pastGamesTmpl.querySelector(".pastGamesList");
 
-        let rawGamesData = GameManager.getRawSavedGamesData();
-        let numGames = Object.keys(rawGamesData).length;
+        let numGames = GameManager.getPastGamesCount();
 
         GameUI.makeLegend(`Saved Games (${numGames})`,
             pastGamesTmpl.querySelector("fieldset"));
 
         if (numGames !== 0)
         {
+            let rawGamesData = GameManager.getRawSavedGamesData();
             let currentGame = window.gameManager.getCurrentGame();
 
             for (let k of Object.keys(rawGamesData).sort((a, b) => b.localeCompare(a)))
