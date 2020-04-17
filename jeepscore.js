@@ -32,9 +32,6 @@ class GameManager
         this.setGame(game);
         GameManager.saveGame(this.game);
 
-        let prettyGameTime = GameUI.formatDateTime(this.game.getStartTime());
-        document.title = `Jeep Score : ${prettyGameTime}`;
-
         GameUI.renderGame(this.game,
             document.querySelector("#currentGameSlot"));
 
@@ -42,7 +39,7 @@ class GameManager
         GameUI.setUiState_allowEnd();
         GameUI.allowBodyClick(true);
         GameUI.setupPastGamesUi();
-        GameUI.saveGameToUrl(this.getCurrentGame());
+        GameUI.updateUrl(this.getCurrentGame());
     }
 
 
@@ -484,8 +481,13 @@ class GameUI
                 {
                     let rawGameData = GameManager.getSavedGameRawData(gameId);
                     if (rawGameData)
+                    {
                         window.gameManager.startGame(new Game(rawGameData));
+                        return;
+                    }
                 }
+
+                GameUI.updateUrl(null);
             });
 
         GameUI.setupNewGameUi();
@@ -770,7 +772,7 @@ class GameUI
             GameManager.deleteSavedGame(gameId);
 
             if (gameId === window.gameManager.getCurrentGame().getId())
-                GameUI.saveGameToUrl(null);
+                GameUI.updateUrl(null);
         }
 
         GameUI.setupCurrentGameUi();
@@ -789,7 +791,7 @@ class GameUI
             GameManager.deleteSavedGame(gameId);
         }
 
-        GameUI.saveGameToUrl(null);
+        GameUI.updateUrl(null);
 
         GameUI.setupCurrentGameUi();
         GameUI.setupPastGamesUi();
@@ -938,6 +940,8 @@ class GameUI
             GameUI.replaceChildrenWithElement(
                 document.querySelector("#currentGameSlot", null));
             window.gameManager.setGame(null);
+            GameUI.updateUrl(null);
+
             return;
         }
 
@@ -957,11 +961,12 @@ class GameUI
     }
 
 
-    static saveGameToUrl(game)
+    static updateUrl(game)
     {
         if (!game)
         {
             window.history.replaceState({}, '', window.location.pathname);
+            document.title = `Jeep Score`;
             return;
         }
 
@@ -971,6 +976,8 @@ class GameUI
             window.history.pushState(game.getId(),
                 prettyGameTime,
                 "#" + game.getId());
+
+            document.title = `Jeep Score : ${prettyGameTime}`;
         }
     }
 
