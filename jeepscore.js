@@ -65,16 +65,10 @@ class GameManager
     static getLatestSavedGame()
     {
         let gameId = GameUI.getGameIdFromUrl(window.location.href);
-        let savedData = GameManager.getRawSavedGamesData();
-
-        if (!gameId)
-        {
-            let gameDates = Object.keys(savedData);
-            gameId = gameDates.sort().slice(-1)[0];
-        }
 
         if (gameId)
         {
+            let savedData = GameManager.getRawSavedGamesData();
             if (savedData[gameId])
                 return new Game(savedData[gameId]);
         }
@@ -774,6 +768,9 @@ class GameUI
         {
             let gameId = $el.value;
             GameManager.deleteSavedGame(gameId);
+
+            if (gameId === window.gameManager.getCurrentGame().getId())
+                GameUI.saveGameToUrl(null);
         }
 
         GameUI.setupCurrentGameUi();
@@ -791,6 +788,8 @@ class GameUI
         {
             GameManager.deleteSavedGame(gameId);
         }
+
+        GameUI.saveGameToUrl(null);
 
         GameUI.setupCurrentGameUi();
         GameUI.setupPastGamesUi();
@@ -960,10 +959,16 @@ class GameUI
 
     static saveGameToUrl(game)
     {
+        if (!game)
+        {
+            window.history.replaceState({}, '', window.location.pathname);
+            return;
+        }
+
         if (window.location.hash.substr(1) !== game.getId())
         {
             let prettyGameTime = GameUI.formatDateTime(game.getStartTime());
-            history.pushState(game.getId(),
+            window.history.pushState(game.getId(),
                 prettyGameTime,
                 "#" + game.getId());
         }
