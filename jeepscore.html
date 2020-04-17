@@ -128,6 +128,11 @@
       font-size: 80%;
     }
 
+    #scoreHelp {
+      padding-left: 0.2em;
+      padding-right: 0.5em;
+    }
+
     #ohno {
       background-color: white;
       height: 100%;
@@ -141,6 +146,10 @@
     #ohno img {
       max-height: 100vh;
       max-width: 100vw;
+    }
+
+    #help {
+      background-color: white;
     }
   </style>
 
@@ -193,6 +202,7 @@
           <label class="scoreMethod">Scoring:&nbsp;
             <select class="scoreAlgo">
             </select>
+            <span id="scoreHelp">&#x2753;</span>
           </label>
         </div>
       </div>
@@ -230,6 +240,27 @@
           </div>
         </div>
     </fieldset>
+  </template>
+
+  <template id="helpTmpl">
+    <div id="help">
+      <h2>Scoring Algorithms</h2>
+
+      <h3>Spread Split</h3>
+      The difference between the highest and lowest bid (the spread) is
+      divided across each player (the split, rounded down) and their range
+      is their bid plus or minus the split.  For example, if player A bids
+      10 and player B bids 20, the spread is 10 (20 - 10) and the split is 5
+      (10 / 2).  So player A's range is 5 (bid 10 - split 5) to 15 (bid
+      10 + split 5), and player B's range is 15 (bid 20 - split 5) to 25
+      (big 20 + split 5).
+      <p>
+      If the count is in the player's range, that player is a winner.
+
+      <h3>Price Is Right</h3>
+      Like in the game show, a player whose bid is closest to the count
+      without going over is the winner.
+    </div>
   </template>
 
   <template id="ohNoTmpl">

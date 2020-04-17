@@ -846,6 +846,9 @@ class GameUI
         GameUI.updateTimes(gameContainer, game);
         GameUI.setupScoringSelector(gameContainer, SCORE_ALGORITHMS, game);
 
+        gameContainer.querySelector("#scoreHelp")
+            .addEventListener("click", GameUI.showHelpDialog);
+
         if (game.getEndTime())
             gameContainer.querySelector("#gameContainer")
                 .classList.add("finishedGame");
@@ -1102,5 +1105,26 @@ class GameUI
         document.body.appendChild($ohnoDiv);
 
         window.setTimeout(() => document.querySelector("#ohno").remove(), 500);
+    }
+
+
+    static showHelpDialog()
+    {
+        let $dialog = document.createElement("dialog");
+        let $helpDiv = GameUI.cloneFromTemplate(document, "#helpTmpl");
+
+        GameUI.replaceChildrenWithElement($dialog, $helpDiv);
+
+        $dialog.addEventListener("close", evt => {
+            $dialog.remove();
+        });
+
+        $dialog.addEventListener("click", evt => {
+            $dialog.remove();
+        });
+
+        document.body.appendChild($dialog);
+
+        $dialog.showModal();
     }
 }
