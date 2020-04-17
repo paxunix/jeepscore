@@ -982,6 +982,15 @@ class GameUI
     }
 
 
+    static getGameDisplayString(game)
+    {
+        let isGameOver = game.getEndTime() !== null;
+        let finishFlag = '&#x1F3C1;';
+
+        return `${GameUI.formatDateTime(game.getStartTime())} ${isGameOver ? `${finishFlag}` : ""} ${game.getNumPlayers()}P ${game.getCount()}#`;
+    }
+
+
     static renderPastGames(templateDoc, destEl)
     {
         let pastGamesTmpl = GameUI.
@@ -1002,17 +1011,12 @@ class GameUI
             for (let k of Object.keys(rawGamesData).sort((a, b) => b.localeCompare(a)))
             {
                 let game = new Game(rawGamesData[k]);
-                let isGameOver = game.getEndTime() !== null;
-
                 let pastGameTmpl = GameUI.
                     cloneFromTemplate(templateDoc, "#pastGameTmpl");
                 let $input = pastGameTmpl.querySelector("input");
                 let $label = pastGameTmpl.querySelector("label");
                 let $text = pastGameTmpl.querySelector("span");
-
-                let finishFlag = '&#x1F3C1;';
-                $text.innerHTML = `${GameUI.formatDateTime(game.getStartTime())} ${isGameOver ? `${finishFlag}` : ""} ${game.getNumPlayers()}P ${game.getCount()}#`;
-
+                $text.innerHTML = GameUI.getGameDisplayString(game);
                 $input.value = game.getId();
 
                 if (currentGame && currentGame.getId() === game.getId())
