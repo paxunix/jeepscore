@@ -496,6 +496,12 @@ class GameUI
     }
 
 
+    static delaySetFocus(el)
+    {
+        window.setTimeout(() => { el.focus() }, 0);
+    }
+
+
     static click_addPlayer(evt)
     {
         let playerEntryDiv = GameUI
@@ -507,17 +513,23 @@ class GameUI
         playerEntryDiv.querySelector(".bidButton")
             .addEventListener("click", GameUI.click_bid);
 
+        playerEntryDiv.querySelector(".playerName")
+            .addEventListener("change", evt => {
+                    let entryEl = evt.target.closest(".playerEntry");
+                    GameUI.delaySetFocus(entryEl.querySelector(".playerBid"));
+                });
+
+        playerEntryDiv.querySelector(".playerBid")
+            .addEventListener("change", GameUI.click_bid);
+
         let playerEntryContainer =
             document.querySelector("#playerEntryContainer");
 
         playerEntryContainer.appendChild(playerEntryDiv);
 
-        // Defer setting focus to latest player name input until UI has
-        // updated or it won't be set.
-        window.setTimeout(() => {
+        GameUI.delaySetFocus(
             Array.from(playerEntryContainer.querySelectorAll(".playerName"))
-                .slice(-1)[0].focus();
-        }, 0);
+                .slice(-1)[0]);
     }
 
 
