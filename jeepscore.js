@@ -190,6 +190,7 @@ class Game
         let endTime = fromObj.endTime ? new Date(fromObj.endTime) : null;
 
         this.data = {
+            id: fromObj.id ?? (new Date()).toISOString(),
             players: players,
             startTime: startTime,
             endTime: endTime,
@@ -399,7 +400,7 @@ class Game
 
     getId()
     {
-        return this.getStartTime().toISOString();
+        return this.data.id;
     }
 }
 
