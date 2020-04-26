@@ -104,8 +104,8 @@ class GameManager
         let data = GameManager.getRawSavedGamesData();
         data[game.getId()] = game.getRawData();
 
-        // Keep the latest 10 current games
-        let dropDates = Object.keys(data).sort().slice(0, -10);
+        let keepHowMany = 20;
+        let dropDates = Object.keys(data).sort().slice(0, -keepHowMany);
         for (let d of dropDates)
             delete data[d];
 
