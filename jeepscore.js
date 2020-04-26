@@ -1042,7 +1042,7 @@ class GameUI
                     $label.classList.add("pastGameLabelCurrent");
                 }
 
-                $list.appendChild($label);
+                $list.appendChild(pastGameTmpl);
             }
         }
 
