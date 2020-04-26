@@ -93,6 +93,12 @@ class GameManager
     }
 
 
+    static deleteAllGames()
+    {
+        localStorage.setItem(STORAGE_KEY_CURRENT, JSON.stringify({}));
+    }
+
+
     static saveCurrentGameData(data)
     {
         localStorage.setItem(STORAGE_KEY_CURRENT, JSON.stringify(data ?? {}));
@@ -797,11 +803,7 @@ class GameUI
         if (window.confirm("Are you sure you want to delete all?") !== true)
             return;
 
-        let rawGamesData = GameManager.getRawSavedGamesData();
-        for (let gameId of Object.keys(rawGamesData))
-        {
-            GameManager.deleteSavedGame(gameId);
-        }
+        GameManager.deleteAllGames();
 
         GameUI.updateUrl(null);
 
