@@ -191,6 +191,7 @@ class Game
 
         this.data = {
             id: fromObj.id ?? (new Date()).toISOString(),
+            name: fromObj.name ?? "",
             players: players,
             startTime: startTime,
             endTime: endTime,
@@ -401,6 +402,18 @@ class Game
     getId()
     {
         return this.data.id;
+    }
+
+
+    getName()
+    {
+        return this.data.name;
+    }
+
+
+    setName(name)
+    {
+        this.data.name = name;
     }
 }
 
@@ -829,6 +842,36 @@ class GameUI
     }
 
 
+    static click_editGame(evt)
+    {
+        let gameId = evt.target.parentElement.querySelector("input").value;
+        let game = window.gameManager.getCurrentGame();
+
+        // Since we're not changing game IDs, we can modify them however
+        // needed.  But, if we're modifying the current game, make sure to
+        // update the game manager's current game object, or future
+        // operations will overwrite changes done here and persisted.
+        if (game.getId() !== gameId)
+        {
+            let gameData = GameManager.getSavedGameRawData(gameId);
+            game = new Game(gameData);
+        }
+
+        let name = window.prompt("Name this game:", game.getName());
+        if (name !== null)
+        {
+            name = name.trim();
+            if (name === "")
+                name = null;
+
+            game.setName(name);
+            GameManager.saveGame(game);     // overwrites the one we got because it will have the same ID
+
+            GameUI.setupPastGamesUi();
+        }
+    }
+
+
     static renderGame(game, $target)
     {
         let gameContainer = GameUI
@@ -990,13 +1033,22 @@ class GameUI
 
         if (window.location.hash.substr(1) !== game.getId())
         {
-            let prettyGameTime = GameUI.formatDateTime(game.getStartTime());
+            let gameTitle = GameUI.getGameTitle(game);
+
             window.history.pushState(game.getId(),
-                prettyGameTime,
+                gameTitle,
                 "#" + game.getId());
 
-            document.title = `Jeep Score : ${prettyGameTime}`;
+            document.title = `Jeep Score : ${gameTitle}`;
         }
+    }
+
+
+    static getGameTitle(game)
+    {
+        return game.getName() !== "" ?
+            game.getName() :
+            GameUI.formatDateTime(game.getStartTime());
     }
 
 
@@ -1005,7 +1057,7 @@ class GameUI
         let isGameOver = game.getEndTime() !== null;
         let finishFlag = '&#x1F3C1;';
 
-        return `${GameUI.formatDateTime(game.getStartTime())} ${isGameOver ? `${finishFlag}` : ""} ${game.getNumPlayers()}P ${game.getCount()}#`;
+        return `${GameUI.getGameTitle(game)} ${isGameOver ? `${finishFlag}` : ""} ${game.getNumPlayers()}P ${game.getCount()}#`;
     }
 
 
@@ -1032,15 +1084,19 @@ class GameUI
                 let pastGameTmpl = GameUI.
                     cloneFromTemplate(templateDoc, "#pastGameTmpl");
                 let $input = pastGameTmpl.querySelector("input");
-                let $label = pastGameTmpl.querySelector("label");
-                let $text = pastGameTmpl.querySelector("span");
-                $text.innerHTML = GameUI.getGameDisplayString(game);
+                let $label = pastGameTmpl.querySelector(".pastGameLabel");
+                let $text = pastGameTmpl.querySelector(".labelText");
+                $text.innerText = GameUI.getGameDisplayString(game);
                 $input.value = game.getId();
 
                 if (currentGame && currentGame.getId() === game.getId())
                 {
-                    $label.classList.add("pastGameLabelCurrent");
+                    let $curGameEntry = $label.closest(".pastGameEntry");
+                    $curGameEntry.classList.add("pastGameLabelCurrent");
                 }
+
+                let $editIcon = pastGameTmpl.querySelector(".edit");
+                $editIcon.addEventListener("click", GameUI.click_editGame);
 
                 $list.appendChild(pastGameTmpl);
             }

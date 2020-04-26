@@ -94,11 +94,12 @@
 
     .pastGamesList {
       font-family: monospace;
+      font-size: 90%;
       width: 100%;
     }
 
     .pastGameLabel {
-      display: block;
+      display: inline;
       width: 100%;
     }
 
@@ -126,6 +127,10 @@
 
     .scoreMethod {
       font-size: 80%;
+    }
+
+    .pastGameEntry .edit {
+      margin-left: 1em;
     }
 
     #scoreHelp {
@@ -224,10 +229,13 @@
   </template>
 
   <template id="pastGameTmpl">
-    <label class="pastGameLabel">
-      <input type="checkbox"></input>
-      <span class="labelText"></span>
-    </label>
+    <div class="pastGameEntry">
+      <label class="pastGameLabel">
+        <input type="checkbox"></input>
+        <span class="labelText"></span>
+      </label>
+      <span class="edit">&#x1f589;</span>
+    </div>
   </template>
 
   <template id="newGameTmpl">
