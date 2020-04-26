@@ -54,7 +54,7 @@ class GameManager
 
     static getPastGamesCount()
     {
-        let savedData = GameManager.getRawSavedGamesData();
+        let savedData = GameManager._getRawSavedGamesData();
         return Object.keys(savedData).length;
     }
 
@@ -65,7 +65,7 @@ class GameManager
 
         if (gameId)
         {
-            let savedData = GameManager.getRawSavedGamesData();
+            let savedData = GameManager._getRawSavedGamesData();
             if (savedData[gameId])
                 return new Game(savedData[gameId]);
         }
@@ -74,7 +74,7 @@ class GameManager
     }
 
 
-    static getRawSavedGamesData()
+    static _getRawSavedGamesData()
     {
         let jsonStr = localStorage.getItem(STORAGE_KEY_CURRENT) ?? "{}";
         let gameData = JSON.parse(jsonStr);
@@ -83,9 +83,16 @@ class GameManager
     }
 
 
+    static getSavedGames()
+    {
+        return Object.values(GameManager._getRawSavedGamesData())
+            .map(data => new Game(data));
+    }
+
+
     static deleteSavedGame(gameId)
     {
-        let data = GameManager.getRawSavedGamesData();
+        let data = GameManager._getRawSavedGamesData();
 
         delete data[gameId];
 
@@ -107,7 +114,7 @@ class GameManager
 
     static saveGame(game)
     {
-        let data = GameManager.getRawSavedGamesData();
+        let data = GameManager._getRawSavedGamesData();
         data[game.getId()] = game.getRawData();
 
         let keepHowMany = 20;
@@ -121,7 +128,7 @@ class GameManager
 
     static getSavedGameRawData(gameId)
     {
-        let data = GameManager.getRawSavedGamesData();
+        let data = GameManager._getRawSavedGamesData();
         return data[gameId];
     }
 }
@@ -1076,12 +1083,13 @@ class GameUI
 
         if (numGames !== 0)
         {
-            let rawGamesData = GameManager.getRawSavedGamesData();
+            let games = GameManager.getSavedGames();
             let currentGame = window.gameManager.getCurrentGame();
 
-            for (let k of Object.keys(rawGamesData).sort((a, b) => b.localeCompare(a)))
+            // Show games from newest to oldest
+            for (let game of games.sort((a, b) =>
+                b.getStartTime().getTime() - a.getStartTime().getTime()))
             {
-                let game = new Game(rawGamesData[k]);
                 let pastGameTmpl = GameUI.
                     cloneFromTemplate(templateDoc, "#pastGameTmpl");
                 let $input = pastGameTmpl.querySelector("input");
