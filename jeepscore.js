@@ -844,7 +844,8 @@ class GameUI
 
     static click_editGame(evt)
     {
-        let gameId = evt.target.parentElement.querySelector("input").value;
+        let gameId = evt.target.closest(".pastGameEntry")
+            .querySelector("input").value;
         let game = window.gameManager.getCurrentGame();
 
         // Since we're not changing game IDs, we can modify them however
