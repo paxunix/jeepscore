@@ -1095,7 +1095,7 @@ class GameUI
                 let $input = pastGameTmpl.querySelector("input");
                 let $label = pastGameTmpl.querySelector(".pastGameLabel");
                 let $text = pastGameTmpl.querySelector(".labelText");
-                $text.innerText = GameUI.getGameDisplayString(game);
+                $text.innerHTML = GameUI.getGameDisplayString(game);
                 $input.value = game.getId();
 
                 if (currentGame && currentGame.getId() === game.getId())
