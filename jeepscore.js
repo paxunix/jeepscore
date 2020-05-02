@@ -853,28 +853,29 @@ class GameUI
     {
         let gameId = evt.target.closest(".pastGameEntry")
             .querySelector("input").value;
-        let game = window.gameManager.getCurrentGame();
 
-        // Since we're not changing game IDs, we can modify them however
-        // needed.  But, if we're modifying the current game, make sure to
-        // update the game manager's current game object, or future
-        // operations will overwrite changes done here and persisted.
-        if (game.getId() !== gameId)
+        let newGame = new Game(GameManager.getSavedGameRawData(gameId));
+        let currentGame = window.gameManager.getCurrentGame();
+
+        // Since we're not changing game IDs, we can modify the games
+        // as needed.  But, if the game entry being renamed is the current
+        // game, make changes on the game manager's current game object
+        // (otherwise, they'll be overwritten on next user action causing a
+        // save).
+        if (currentGame && currentGame.getId() === gameId)
         {
-            let gameData = GameManager.getSavedGameRawData(gameId);
-            game = new Game(gameData);
+            newGame = currentGame;
         }
 
-        let name = window.prompt("Name this game:", game.getName());
+        let name = window.prompt("Name this game:", newGame.getName());
         if (name !== null)
         {
             name = name.trim();
             if (name === "")
                 name = null;
 
-            game.setName(name);
-            GameManager.saveGame(game);     // overwrites the one we got because it will have the same ID
-
+            newGame.setName(name);
+            GameManager.saveGame(newGame);
             GameUI.setupPastGamesUi();
         }
     }
