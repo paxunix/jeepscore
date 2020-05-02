@@ -1063,10 +1063,7 @@ class GameUI
 
     static getGameDisplayString(game)
     {
-        let isGameOver = game.getEndTime() !== null;
-        let finishFlag = '&#x1F3C1;';
-
-        return `${GameUI.getGameTitle(game)} ${isGameOver ? `${finishFlag}` : ""} ${game.getNumPlayers()}P ${game.getCount()}#`;
+        return `${GameUI.getGameTitle(game)} ${game.getNumPlayers()}P ${game.getCount()}#`;
     }
 
 
@@ -1096,14 +1093,20 @@ class GameUI
                 let $input = pastGameTmpl.querySelector("input");
                 let $label = pastGameTmpl.querySelector(".pastGameLabel");
                 let $text = pastGameTmpl.querySelector(".labelText");
-                $text.innerHTML = GameUI.getGameDisplayString(game);
+                $text.innerText = GameUI.getGameDisplayString(game);
                 $input.value = game.getId();
 
-                if (currentGame && currentGame.getId() === game.getId())
+                if (game.getEndTime() !== null)
                 {
-                    let $curGameEntry = $label.closest(".pastGameEntry");
-                    $curGameEntry.classList.add("pastGameLabelCurrent");
+                    let $rowColor = pastGameTmpl.querySelector(".rowColor");
+                    $rowColor.classList.add("ended");
                 }
+
+                let $isCurrent = pastGameTmpl.querySelector(".isCurrent");
+                if (currentGame && currentGame.getId() === game.getId())
+                    $isCurrent.classList.add("current");
+                else
+                    $isCurrent.classList.add("notcurrent");
 
                 let $editIcon = pastGameTmpl.querySelector(".edit");
                 $editIcon.addEventListener("click", GameUI.click_editGame);

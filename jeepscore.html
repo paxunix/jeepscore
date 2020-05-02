@@ -102,10 +102,6 @@
       width: 100%;
     }
 
-    .pastGameLabelCurrent {
-      background-color: cyan;
-    }
-
     #newGameSlot, #pastGamesSlot {
       margin-top: 2ex;
     }
@@ -131,6 +127,19 @@
     .pastGameEntry {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+    }
+
+    .pastGameEntry .ended {
+      background-color: lightgrey;
+    }
+
+    .pastGameEntry .current span.arrow {
+      visibility: visible;
+    }
+
+    .pastGameEntry .notcurrent span.arrow {
+      visibility: hidden;
     }
 
     .pastGameEntry .edit {
@@ -234,13 +243,18 @@
 
   <template id="pastGameTmpl">
     <div class="pastGameEntry">
-      <label class="pastGameLabel">
-        <input type="checkbox"></input>
-        <span class="labelText"></span>
-      </label>
-      <span class="edit">
-        <img src="edit-24px.svg">
-      </span>
+      <div class="rowColor">
+        <div class="isCurrent">
+          <span class="arrow">➔</span>
+          <label class="pastGameLabel">
+            <input type="checkbox"></input>
+            <span class="labelText"></span>
+          </label>
+          <span class="edit">
+            <img src="edit-24px.svg">
+          </span>
+        </div>
+      </div>
     </div>
   </template>
 
