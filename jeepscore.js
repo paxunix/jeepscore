@@ -1164,8 +1164,8 @@ class GameUI
     static formatDateTime(dateObj)
     {
         return new Intl.DateTimeFormat(undefined, {
-                dateStyle: "medium",
-                timeStyle: "long",
+              year: "numeric", month: "short", day: "numeric",
+              hour: "numeric", minute: "numeric"
             }).format(dateObj);
     }
 
