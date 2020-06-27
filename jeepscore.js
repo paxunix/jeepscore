@@ -517,6 +517,22 @@ class GameUI
                 GameUI.updateUrl(null);
             });
 
+        // To try and prevent reloading the page on mobile because your
+        // browser has been swapped out and tries to reload the page upon
+        // swap in, but you're offline and you now get cached markup and
+        // probably no Javascript, we check if we're about to be unloaded
+        // and if the user is offline, prompt to be sure they want to.
+        // State wouldn't be lost in any case, but your cached reloaded page
+        // may not otherwise be functional.
+        window.addEventListener("beforeunload", evt => {
+                if (navigator.onLine)
+                    return;
+
+                let msg = "You're offline--you might no longer be able to use this page until you're back online.";
+                (evt || window.event).returnValue = msg;
+                return msg;
+            });
+
         GameUI.setupNewGameUi();
         GameUI.setupCurrentGameUi();
         GameUI.setupPastGamesUi();
