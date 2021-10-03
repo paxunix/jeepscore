@@ -1506,12 +1506,17 @@ class GameUI
       The difference between the highest and lowest bid (the spread) is
       divided across each player (the split, rounded down) and their range
       is their bid plus or minus the split.  For example, if player A bids
-      10 and player B bids 20, the spread is 10 (20 - 10) and the split is 5
-      (10 / 2).  So player A's range is 5 (bid 10 - split 5) to 15 (bid
-      10 + split 5), and player B's range is 15 (bid 20 - split 5) to 25
-      (big 20 + split 5).
+      10, and player B bids 20, and player C bids 22, the spread is 12
+      (highest bid 22 - lowest bid 10) and the split is 4 (spread 12 / 3
+      players).  So:
       <p>
-      If the count is in the player's range, that player is a winner.
+      Player A's range is 6 (bid 10 - split 4) to 14 (bid 10 + split 4)
+      <p>
+      Player B's range is 16 (bid 20 - split 4) to 24 (bid 20 + split 4)
+      <p>
+      Player C's range is 18 (bid 22 - split 4) to 26 (bid 22 + split 4)
+      <p>
+      If the count is within the player's range, that player is a winner.
 
       <h3>Price Is Right</h3>
       Like in the game show, a player whose bid is closest to the count
