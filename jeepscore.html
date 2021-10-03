@@ -197,6 +197,7 @@
 
   <script type="text/javascript">
 const STORAGE_KEY_CURRENT = "jeepscore-CurrentGames";
+const MAX_SAVE_GAME_COUNT = 50;
 
 class GameManager
 {
@@ -315,8 +316,7 @@ class GameManager
         let data = GameManager._getRawSavedGamesData();
         data[game.getId()] = game.getRawData();
 
-        let keepHowMany = 20;
-        let dropDates = Object.keys(data).sort().slice(0, -keepHowMany);
+        let dropDates = Object.keys(data).sort().slice(0, -MAX_SAVE_GAME_COUNT);
         for (let d of dropDates)
             delete data[d];
 
