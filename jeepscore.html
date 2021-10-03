@@ -1397,7 +1397,7 @@ class GameUI
     static showHelpDialog()
     {
         let $dialog = document.createElement("dialog");
-        let $helpDiv = GameUI.cloneFromTemplate(document, "#helpTmpl");
+        let $helpDiv = GameUI.cloneFromTemplate(document, "#scoreHelpTmpl");
 
         GameUI.replaceChildrenWithElement($dialog, $helpDiv);
 
@@ -1516,7 +1516,7 @@ class GameUI
     </fieldset>
   </template>
 
-  <template id="helpTmpl">
+  <template id="scoreHelpTmpl">
     <div id="help">
       <h2>Scoring Algorithms</h2>
 
