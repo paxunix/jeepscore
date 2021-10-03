@@ -998,7 +998,7 @@ class GameUI
             return;
         }
 
-        if (window.confirm("Are you sure you want to delete?") !== true)
+        if (window.confirm("Are you sure you want to delete this saved game?") !== true)
             return;
 
         for (let $el of $checked)
@@ -1017,7 +1017,7 @@ class GameUI
 
     static click_deleteAll(evt)
     {
-        if (window.confirm("Are you sure you want to delete all?") !== true)
+        if (window.confirm("Are you sure you want to delete all saved games?") !== true)
             return;
 
         GameManager.deleteAllGames();
