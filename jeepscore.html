@@ -83,7 +83,7 @@
       background-color: salmon;
     }
 
-    .timeTable {
+    .gamemeta {
       font-size: 80%;
     }
 
@@ -952,7 +952,7 @@ class GameUI
 
         window.gameManager.endGame();
 
-        GameUI.updateTimes(document.querySelector(".timeTable"), currentGame);
+        GameUI.updateTimes(document.querySelector(".gamemeta"), currentGame);
 
         let gameContainer = document.querySelector("#gameContainer");
         GameUI.allowCounterActions(false, gameContainer);
@@ -978,7 +978,7 @@ class GameUI
     {
         let currentGame = window.gameManager.getCurrentGame();
         if (currentGame)
-            GameUI.updateTimes(document.querySelector(".timeTable"), currentGame);
+            GameUI.updateTimes(document.querySelector(".gamemeta"), currentGame);
     }
 
 
@@ -1438,17 +1438,19 @@ class GameUI
   <template id="currentGameTmpl">
     <fieldset id="gamePanel">
       <div id="gameContainer">
-        <table class="timeTable">
-          <tr class="startTime">
-            <td>Started:</td> <td class="startTimeValue"></td>
-          </tr>
-          <tr class="endTime">
-            <td>Ended:</td> <td class="endTimeValue"></td>
-          </tr>
-          <tr class="elapsedTime">
-            <td>Elapsed:</td> <td class="elapsedTimeValue"></td>
-          </tr>
-        </table>
+        <div class="gamemeta">
+          <div class="timeTable">
+            <div class="startTime">
+              Started: <span class="startTimeValue"></span>
+            </div>
+            <div class="endTime">
+              Ended: <span class="endTimeValue"></span>
+            </div>
+            <div class="elapsedTime">
+              Elapsed: <span class="elapsedTimeValue"></span>
+            </div>
+          </div>
+        </div>
         <hr/>
         <table class="scoreBoard">
         </table>
