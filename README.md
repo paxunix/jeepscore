@@ -65,7 +65,7 @@ In the center is the current count.  Tapping the up arrow or the count will
 have accidentally added more than one).
 
 Over on the right of the count area is a menu that lets you select the
-scoring algorithm (with its own help if you tap the ? icon).
+scoring algorithm.
 
 Below the count area are some game-management options.  It's okay to start a
 new game while a game is currently going on--you won't lose the existing
@@ -88,6 +88,29 @@ Clicking the End button will prompt you to end the current game.  Once
 ended, that game count can no longer be updated and the background is
 changed grey to distinguish finished games from ongoing games.  There is no
 way to restart a game that has been ended.
+
+
+Scoring Algorithms
+==================
+
+**Spread Split**
+
+The difference between the highest and lowest bid (the spread) is divided
+across each player (the split, rounded down) and their range is their bid
+plus or minus the split.  For example, if player A bids 10, and player B
+bids 20, and player C bids 22, the spread is 12 (highest bid 22 - lowest
+bid 10) and the split is 4 (spread 12 / 3 players).  So:
+
+Player A's range is 6 (bid 10 - split 4) to 14 (bid 10 + split 4)
+Player B's range is 16 (bid 20 - split 4) to 24 (bid 20 + split 4)
+Player C's range is 18 (bid 22 - split 4) to 26 (bid 22 + split 4)
+
+If the count is within the player's range, that player is a winner.
+
+**Price Is Right**
+
+Like in the game show, the winner is the player whose bid is closest
+to the count without going over.
 
 
 A Few Other Details
