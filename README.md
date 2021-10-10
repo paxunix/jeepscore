@@ -6,8 +6,7 @@ My friends and I play a game:  how many Jeep Wranglers will we see today?
 I got tired of keeping track of everyone's guesses and the count of how many
 Wranglers we've seen.  So I made the computer do it for me.
 
-Go here: [](https://paxunix.github.io/jeepscore/jeepscore.html) to see your
-gameboard.
+You can view your [gameboard here](https://paxunix.github.io/jeepscore/jeepscore.html).
 
 
 The Rules
@@ -37,7 +36,7 @@ How To Play
 Someone's in charge of the game--it doesn't matter who, they'll just need to
 browse to the game link on their phone:
 
-[](https://paxunix.github.io/jeepscore/jeepscore.html)
+[Gameboard](https://paxunix.github.io/jeepscore/jeepscore.html)
 
 Everyone agrees on the time-frame of the game:  the whole day, the next
 hour, the entire vacation, whatever.  You can have multiple games going at
