@@ -6,7 +6,7 @@ My friends and I play a game:  how many Jeep Wranglers will we see today?
 I got tired of keeping track of everyone's guesses and the count of how many
 Wranglers we've seen.  So I made the computer do it for me.
 
-Go here: https://paxunix.github.io/jeepscore/jeepscore.html to see your
+Go here: [](https://paxunix.github.io/jeepscore/jeepscore.html) to see your
 gameboard.
 
 
@@ -37,7 +37,7 @@ How To Play
 Someone's in charge of the game--it doesn't matter who, they'll just need to
 browse to the game link on their phone:
 
-https://paxunix.github.io/jeepscore/jeepscore.html
+[](https://paxunix.github.io/jeepscore/jeepscore.html)
 
 Everyone agrees on the time-frame of the game:  the whole day, the next
 hour, the entire vacation, whatever.  You can have multiple games going at
@@ -102,7 +102,9 @@ bids 20, and player C bids 22, the spread is 12 (highest bid 22 - lowest
 bid 10) and the split is 4 (spread 12 / 3 players).  So:
 
 Player A's range is 6 (bid 10 - split 4) to 14 (bid 10 + split 4)
+
 Player B's range is 16 (bid 20 - split 4) to 24 (bid 20 + split 4)
+
 Player C's range is 18 (bid 22 - split 4) to 26 (bid 22 + split 4)
 
 If the count is within the player's range, that player is a winner.
@@ -125,12 +127,19 @@ The game only runs on your device (phone, computer, etc.) and all the games
 you play are saved there.
 
 No identification.
+
 No cloud.
+
 No tracking.
+
 No spying.
+
 No ads.
+
 No nagging.
+
 No popups.
+
 No micropayments.
 
 There's a link at the bottom of the gameboard to Github, where this project
