@@ -67,7 +67,7 @@
     }
 
     table.scoreBoard .bid {
-      font-size: 115%;
+      font-size: 1.15rem;
       font-weight: bold;
     }
 
@@ -83,8 +83,13 @@
       background-color: salmon;
     }
 
+    #playerEntryPanel {
+      display: flex;
+      justify-content: space-between;
+    }
+
     .gamemeta {
-      font-size: 80%;
+      font-size: 0.8rem;
       display: flex;
       justify-content: space-between;
     }
@@ -122,14 +127,19 @@
     }
 
     .scoreMethod {
-      font-size: 80%;
+      font-size: 0.80rem;
+    }
+
+    #pastGamesPanel {
+      display: flex;
+      justify-content: space-between;
     }
 
     .pastGameEntry {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 90%;
+      font-size: 0.80rem;
     }
 
     .pastGameEntry .ended {
@@ -168,21 +178,35 @@
     }
 
     .plug {
-      font-size: 70%;
+      font-size: 0.7rem;
       padding-top: 1ex;
-      color: #b9b9b9;
+      display: flex;
+      justify-content: space-between;
     }
 
-    .plug a {
+    .projectlink :link {
+      color: #b9b9b9;
       text-decoration: none;
     }
 
-    .plug a:link {
+    .projectlink :visited {
       color: #b9b9b9;
+      text-decoration: none;
     }
 
-    .plug a:visited {
-      color: #b9b9b9;
+    .helplink {
+      padding: 0.5em;
+      font-size: 0.7rem;
+      color: #d51919;
+      text-decoration: none;
+    }
+
+    .helplink :link {
+      color: #d51919;
+    }
+
+    .helplink :visited {
+      color: #d51919;
     }
   </style>
 
@@ -1419,6 +1443,9 @@ class GameUI
               Elapsed: <span class="elapsedTimeValue"></span>
             </div>
           </div>
+          <div class="helplink">
+            <a href="https://paxunix.github.io/jeepscore/README.html" target="_blank">HELP</a>
+          </div>
         </div>
         <hr/>
         <table class="scoreBoard">
@@ -1449,6 +1476,9 @@ class GameUI
           <button id="deleteGameButton">Delete</button>
           <button id="deleteAllGamesButton">Delete All</button>
         </div>
+      </div>
+      <div class="helplink">
+        <a href="https://paxunix.github.io/jeepscore/README.html" target="_blank">HELP</a>
       </div>
     </fieldset>
   </template>
@@ -1482,6 +1512,9 @@ class GameUI
             <button id="startGameButton">Start</button>
           </div>
         </div>
+        <div class="helplink">
+          <a href="https://paxunix.github.io/jeepscore/README.html" target="_blank">HELP</a>
+        </div>
     </fieldset>
   </template>
 
@@ -1505,7 +1538,9 @@ class GameUI
   </div>
 
   <div class="plug">
-    <a href="https://github.com/paxunix/jeepscore" target="_blank">Check out this project on Github</a>
+    <div class="projectlink">
+      <a href="https://github.com/paxunix/jeepscore" target="_blank">Check out this project on Github</a>
+    </div>
   </div>
 
 <script>
