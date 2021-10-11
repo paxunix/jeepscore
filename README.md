@@ -71,11 +71,14 @@ new game while a game is currently going on--you won't lose the existing
 one.
 
 The bottom-most section shows which games are saved on your phone.  There is
-a maximum of 50, above which the oldest games will be deleted.
+a maximum of 50, above which the oldest games will be automatically deleted.
 
-You can delete all games, check the boxes to delete specific games, or check
-a single box to load that game (this makes it become the active game and the
-Game count area will be updated).
+You can delete all games, or check the boxes to delete specific games.  A
+prompt will confirm you are sure you want to delete before doing so.
+
+Clicking the Load button will load the checked game and it will replace the
+active game in the above panel.  Your previous game is not lost, it is just
+no longer the active game--you can always load it back in.
 
 By default, the game is named based on the date and time it was started.
 The row prefixed with an arrow (➔) indicates the current (visible) game.
