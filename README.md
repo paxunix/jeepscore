@@ -85,8 +85,8 @@ count.
 
 Clicking the End button will prompt you to end the current game.  Once
 ended, that game count can no longer be updated and the background is
-changed grey to distinguish finished games from ongoing games.  There is no
-way to restart a game that has been ended.
+changed to grey to distinguish finished games from ongoing games.  There is
+no way to restart a game that has been ended.
 
 
 Scoring Algorithms
